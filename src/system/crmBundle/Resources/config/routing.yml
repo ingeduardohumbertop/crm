@@ -1,0 +1,84 @@
+index:
+    path:     /
+    defaults: { _controller: crmBundle:Default:index, limit: 1 }
+    requirements:
+        limit:  \d+
+login_route:
+    path: /login
+    defaults: {_controller: crmBundle:Security:login}
+login_check:
+    path: /login_check
+    defaults: {_controller: crmBundle:Security:loginCheck}
+logout:
+    path:   /logout
+usuariosIndex:
+    path:     /usuarios
+    defaults: { _controller: crmBundle:Usuarios:index}
+usuariosAgregar:
+    path:     /usuarios/agregar
+    defaults: { _controller: crmBundle:Usuarios:handler}
+usuariosEditar:
+    path:     /usuarios/editar/{idUsuario}
+    defaults: { _controller: crmBundle:Usuarios:handler}
+    requirements:
+        idUsuario:  \d+
+usuariosEliminar:
+    path:     /usuarios/eliminar/{idUsuario}
+    defaults: { _controller: crmBundle:Usuarios:eliminar}
+    requirements:
+        idUsuario:  \d+
+UsuariosFoto:
+    path:     /usuarios/foto/{idUsuario}
+    defaults: { _controller: crmBundle:Usuarios:listFoto}
+    requirements:
+        idUsuario:  \d+
+ProvedoresIndex:
+    path:     /provedores
+    defaults: { _controller: crmBundle:Provedores:index}
+ProvedoresAgregar:
+    path:     /provedores/agregar
+    defaults: { _controller: crmBundle:Provedores:handler}
+ProvedoresEditar:
+    path:     /provedores/editar/{idProvedor}
+    defaults: { _controller: crmBundle:Provedores:handler}
+    requirements:
+        idProvedor:  \d+
+ProvedoresEliminar:
+    path:     /provedores/eliminar/{idProvedor}
+    defaults: { _controller: crmBundle:Provedores:eliminar}
+    requirements:
+        idProvedor:  \d+
+MaquinariaIndex:
+    path:     /maquinaria
+    defaults: { _controller: crmBundle:Maquinaria:index}
+    
+MaquinariaActivar:
+    path:     /mauinaria/isActive
+    defaults: { _controller: crmBundle:Maquinaria:isActive}
+MaquinariaAgregar:
+    path:     /maquinaria/agregar
+    defaults: { _controller: crmBundle:Maquinaria:handler}
+MaquinariaEditar:
+    path:     /maquinaria/editar/{idMaquinaria}
+    defaults: { _controller: crmBundle:Maquinaria:handler}
+    requirements:
+        idMaquinaria:  \d+
+MauinariaEliminar:
+    path:     /maquinaria/eliminar/{idMaquinaria}
+    defaults: { _controller: crmBundle:Maquinaria:eliminar}
+    requirements:
+        idMaquinaria:  \d+
+ClientesIndex:
+    path:     /clientes
+    defaults: { _controller: crmBundle:Clientes:index}
+ClientesAgregar:
+    path:     /clientes/agregar
+    defaults: { _controller: crmBundle:Clientes:handler}
+ClientesEditar:
+    path:     /clientes/editar/{idCliente}
+    defaults: { _controller: crmBundle:Clientes:handler}
+    requirements:
+        idCliente:  \d+
+ObrasIndex:
+    path:     /obras
+    defaults: { _controller: crmBundle:Obras:index}

@@ -1,0 +1,44 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<style>
+<!--
+body{
+background: #C5C5C5;
+}
+
+-->
+</style>
+{% endblock %}
+{% block body %}
+{% if error %}
+<div class="alert alert-danger text-center" role="alert"> 
+	<strong></strong> {{ error.messageKey|trans(error.messageData, 'security') }} <a href="#" class="alert-link"></a>
+</div>
+{% endif %}
+<div class="container">
+	<div class="row" >
+		<div class="col-sm-7 col-sm-offset-2">
+			<form class="form-signin" action="{{ path('login_check') }}" method="post" class='form-horizontal'>
+			<h2 class="form-signin-heading text-center">Bienvenido a Siglo2001 Online</h2>
+				
+					<div class="form-group">
+						<label class="col-sm-12 control-label" for="username">Usuario:</label>
+						<div class="col-sm-12">
+							<input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-12 control-label" for="password">Password:</label>
+						<div class="col-sm-12">
+							<input type="password" id="password" name="_password" class="form-control">
+						</div>
+					</div>
+				<div style="text-align: center;" >
+					<button class="btn btn-lg btn-warning" type="submit" style="margin: 10px;">Entrar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

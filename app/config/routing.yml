@@ -1,0 +1,11 @@
+crm:
+    resource: "@crmBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+
+oneup_uploader:
+    resource: .
+    type: uploader

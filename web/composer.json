@@ -1,0 +1,5 @@
+{
+    "require": {
+        "oneup/uploader-bundle": "~1.4"
+    }
+}

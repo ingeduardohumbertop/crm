@@ -1,0 +1,80 @@
+<?php 
+//C:\Users\EduardoHumberto\Desktop\SCAOcrm
+//php app/console doctrine:generate:entities system/crmBundle/Entity
+namespace system\crmBundle\Entity;
+use Doctrine\ORM\Mapping as ORM;
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="obras")
+ */
+class Obras
+{
+	
+	/**
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 */
+	protected $nombre;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	protected $fechaInicioReal;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	protected $fechafinalReal;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	protected $fechaInicioPlan;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	protected $fechaFinalPlan;
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 */
+	protected $costePlanificado;
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 */
+	protected $costeReal;
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 */
+	protected $direccion;
+	/**
+	* @ORM\Column(type="string", length=100)
+	 */
+	protected $idCliente;
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 */
+	protected $estado;
+	/**
+	 * @ORM\Column(type="string", length=50)
+	 */
+	protected $municipio;
+	/**
+	 * @ORM\Column(type="string", length=50)
+	 */
+	protected $colonia	;
+	/**
+	* @ORM\Column(type="string", length=100)
+	 */
+	protected $calle;
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 */
+	protected $estadoObra;
+	/**
+	 * @ORM\Column(type="text")
+	 */
+	protected $notas;
+
+}

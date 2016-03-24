@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>{% block title %}Siglo2001{% endblock %}</title>
+		{% block stylesheets %}
+			<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+		{% endblock %}
+		<link rel="icon" type="image/x-icon" href="{{ asset('public/images/sigloo.ico') }}" />
+	</head>
+	<body>
+		<header>
+		<div>
+			<nav class="navbar navbar-inverse navbar-fixed-top" >
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+							<a class="navbar-brand" href="/">SIGLO2001 ONLINE </a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+					{{mainMenu|raw}}
+					</div>
+				</div>
+			</nav>
+		</header>
+		<br><br>
+		<br>
+		<div style="text-align: right; line-height:0;">
+			<span style="margin-right: 20px; line-height:0; font-weight: bold;">USUARIO:<span class="label label-default">{{app.user.getNombre}} {{app.user.getAPaterno}} {{app.user.getAMaterno}}</span></span>
+		</div>
+		<div class="container-fluid"">
+			<div class="row"">
+				<div class="col-sm-12 col-md-12 main">
+					{% for flashMessage in app.session.flashbag.get('mensaje') %}
+						<div class="alert alert-success" role="alert"> 
+							<strong></strong> {{ flashMessage }} <a href="#" class="alert-link"></a>
+						</div>
+					{% endfor %}
+					{% for flashMessage in app.session.flashbag.get('error') %}
+						<div class="alert alert-danger" role="alert"> 
+							<strong></strong> {{ flashMessage }} <a href="#" class="alert-link"></a>
+						</div>
+						<hr>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		{% block body %}{% endblock %}
+{% block javascripts %}
+<script src="{{ asset('public/js/jquery-2.2.0.js')}}" type="text/javascript"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+{% endblock %}
+</body>
+</html>

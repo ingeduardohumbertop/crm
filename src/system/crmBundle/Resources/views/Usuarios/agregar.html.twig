@@ -1,0 +1,430 @@
+{% extends 'crmBundle::base.html.twig' %}
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('public/js/jQuery-File-Upload-9.10.1/css/jquery.fileupload-ui.css')}}">
+<link rel="stylesheet" href="{{ asset('public/js/jQuery-File-Upload-9.10.1/css/jquery.fileupload.css')}}">
+
+{% endblock %}
+{% block body %}
+<div class="container">
+	<h2>{{ header }} <span class="glyphicon glyphicon-user" aria-hidden="true"></span><span style="font-size: 60%"> {{ nombre }} {{ apellidoP }} {{ apellidoM }}</span></h2>
+	<hr>
+	<div role="tabpanel">	
+		<ul id="myTab" class="nav nav-tabs" role="tablist">
+			<li role="presentation" class="active"><a href="#informacion" aria-controls="informacion" role="tab" data-toggle="tab">Datos del Usuario</a></li>
+			<li role="presentation"><a href="#foto" aria-controls="foto" role="tab" data-toggle="tab" style='{{display}}'>Foto</a></li>
+		</ul>
+	<div class="tab-content">
+	    <div role="tabpanel" class="tab-pane active" id="informacion">
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#basico" aria-controls="basico" role="tab" data-toggle="tab">Informacion Basica</a></li>
+				<li role="presentation"><a href="#direccion" aria-controls="direccion" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Direccion</a></li>
+				{% if permisos.permisosAgregar ==1 %}<li role="presentation"><a href="#permisos" aria-controls="permisos" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-lock" aria-hidden="true"> Permisos</a></li>{% endif %}
+			</ul>
+			{{ form_start(form, {'attr': {'id': 'usuariosForm'}}) }}
+			 <div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="basico">
+					<h3 class="text-center">Informacion basica del usuario</h3>
+					{{ form_errors(form) }}
+					{{ form_row(form.nombre) }}
+					{{ form_row(form.aPaterno) }}
+					{{ form_row(form.aMaterno) }}
+					<div class="form-group">
+						<label class="col-xs-2 control-label required" for="system_crmbundle_usuarios_username">Usuario(RFC)</label>
+						<div class="col-xs-10">
+							<div class="input-group">
+								<div class="input-group-addon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
+								{{ form_widget(form.username) }}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-2 control-label">Password</label>
+						<div class="col-xs-10">
+							<div class="input-group">
+								<div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
+								{{ form_widget(form.password) }}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label required" for="system_crmbundle_usuarios_email">Email</label>
+						<div class="col-sm-10">
+							<div class="input-group">
+								<div class="input-group-addon">@</div>
+								{{ form_widget(form.email) }}
+							</div>
+						</div>
+					</div>
+					{{ form_row(form.fechaNacimiento) }}
+					{{ form_row(form.isActive) }}
+					{{ form_row(form.puesto) }}
+					{{ form_row(form.rol) }}
+					{{ form_row(form.genero) }}
+					{{ form_row(form.estadoCivil) }}
+					{{ form_row(form.notas) }}
+				</div>
+				<div role="tabpanel" class="tab-pane" id="direccion">
+					<h3 class="text-center">Direccion del Usuario</h3>
+					{{ form_row(form.telefono) }}
+					{{ form_row(form.celular) }}
+					{{ form_row(form.calle) }}
+					{{ form_row(form.colonia) }}
+					{{ form_row(form.municipio) }}
+					{{ form_row(form.estado) }}
+					{{ form_row(form.pais) }}
+					{{ form_row(form.cP) }}
+				</div>
+			{% if permisos.permisosAgregar %}
+				<div role="tabpanel" class="tab-pane" id="permisos">
+					<h3 class="text-center">Agregar Permimios del Usuario</h3>
+					<hr style="border-style: dotted; border:.5px dotted;">
+					<div class="row">
+						<div class="col-sm-12" style="text-align: center;"><span>Acceso a menus</span></div>
+						<div class="col-sm-3" style="text-align: center;">{{ form_widget(formPermisos.moduloOpciones) }}</div>
+						<div class="col-sm-3" style="text-align: center;">{{ form_widget(formPermisos.moduloInventario) }}</div>
+						<div class="col-sm-3" style="text-align: center;"></div>
+						<div class="col-sm-3" style="text-align: center;"></div>
+						<div class=”clearfix"></div>
+					</div>
+					<hr style="border-style: dotted; border:.5px dotted;">
+					<div class="col-sm-3 modulop" style="font-weight: bold;">
+						<div class="input-group modulo">
+							<div class="input-group-addon" style="background-color:#fff; border: #fff">
+							<span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
+						{{ form_widget(formPermisos.usuariosModulo) }}
+						</div>
+						<div style="padding: 0 20px;" class="secciones">
+						{{ form_widget(formPermisos.usuariosAgregar) }}
+						{{ form_widget(formPermisos.usuariosEditar) }}
+						{{ form_widget(formPermisos.usuariosEliminar) }}
+						{{ form_widget(formPermisos.permisosAgregar) }}
+						</div>
+					</div>
+					<div class="col-sm-3 modulop" style="font-weight: bold;" >
+					<div class="input-group modulo">
+							<div class="input-group-addon" style="background-color:#fff; border: #fff">
+							<span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
+						{{ form_widget(formPermisos.provedoresModulo) }}
+						</div>
+						<div style="padding: 0 20px;" class="secciones">
+						{{ form_widget(formPermisos.provedoresAgregar) }}
+						{{ form_widget(formPermisos.provedoresEditar) }}
+						{{ form_widget(formPermisos.provedoresEliminar) }}
+						</div>
+					
+					</div>
+					<div class="col-sm-3 modulop" style="font-weight: bold;" >
+						<div class="input-group modulo">
+							<div class="input-group-addon" style="background-color:#fff; border: #fff">
+							<span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
+							{{ form_widget(formPermisos.maquinariaModulo) }}
+						</div>
+						<div style="padding: 0 20px;" class="secciones">
+							{{ form_widget(formPermisos.maquinariaAgregar) }}
+							{{ form_widget(formPermisos.maquinariaEditar) }}
+							{{ form_widget(formPermisos.maquinariaEliminar) }}
+						</div>
+					</div>
+					<div class="col-sm-3 modulop" style="font-weight: bold;" >
+						<div class="input-group modulo">
+							<div class="input-group-addon" style="background-color:#fff; border: #fff">
+							<span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
+							<span>{{ form_widget(formPermisos.moduloClientes) }}</span>
+						</div>
+						<div style="padding: 0 20px;" class="secciones">
+							{{ form_widget(formPermisos.clientesAgregar) }}
+							{{ form_widget(formPermisos.clientesEditar) }}
+							{{ form_widget(formPermisos.clientesEliminar) }}
+						</div>
+					
+					</div>
+					<div style="clear: both;"></div>
+					<hr>
+					<div class="row" >
+						<div class="col-sm-3 modulop" style="font-weight: bold;" >
+							<div class="input-group modulo">
+								<div class="input-group-addon" style="background-color:#fff; border: #fff">
+								<span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
+								<span>{{ form_widget(formPermisos.obrasModulo) }}</span>
+							</div>
+							<div style="padding: 0 20px;" class="secciones">
+								{{ form_widget(formPermisos.obrasAgregar) }}
+								{{ form_widget(formPermisos.obrasEditar) }}
+								{{ form_widget(formPermisos.obrasEliminar) }}
+							</div>
+						</div>
+					</div>
+					{{ form_row(formPermisos._token) }}
+				</div>
+			{% endif %}
+			</div>
+				{{ form_row(form.save) }}
+				{{ form_row(form._token) }}
+				{{ form_end(form, {'render_rest': true}) }}
+				{{ form_end(form, {'render_rest': false}) }}
+	    </div>
+	    <div role="tabpanel" class="tab-pane" id="foto">
+			<form id="fileupload" action="{{ oneup_uploader_endpoint('gallery') }}" method="POST" enctype="multipart/form-data">
+				<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+				<div class="row fileupload-buttonbar">
+					<div class="col-lg-7">
+						<!-- The fileinput-button span is used to style the file input field as button -->
+						<span class="btn btn-success fileinput-button">
+							<i class="glyphicon glyphicon-plus"></i>
+							<span>Agregar foto...</span>
+							<input type="file" name="blueimp" multiple>
+						</span>
+						<button type="reset" class="btn btn-warning cancel">
+							<i class="glyphicon glyphicon-ban-circle"></i>
+							<span>Cancelar carga</span>
+						</button>
+						<!-- The global file processing state -->
+						<span class="fileupload-process"></span>
+					</div>
+					<!-- The global progress state -->
+					<div class="col-lg-5 fileupload-progress fade">
+						<!-- The global progress bar -->
+						<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+							<div class="progress-bar progress-bar-success" style="width:0%;"></div>
+						</div>
+						<!-- The extended global progress state -->
+						<div class="progress-extended">&nbsp;</div>
+					</div>
+				</div>
+				<!-- The table listing the files available for upload/download -->
+				<table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+			</form>
+			<!-- The template to display files available for upload -->
+			<script id="template-upload" type="text/x-tmpl">
+		{% verbatim %}
+		{% for (var i=0, file; file=o.files[i]; i++) { %}
+			<tr class="template-upload fade" idFotos="0" >
+				<td>
+					<span class="preview"></span>
+				</td>
+				<td>
+					<p class="name">{%=file.name%}</p>
+					<strong class="error text-danger"></strong>
+				</td>
+				<td>
+					<p class="size">Procesando...</p>
+					<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+				</td>
+				<td>
+					{% if (!i && !o.options.autoUpload) { %}
+						<button class="btn btn-primary start" disabled>
+							<i class="glyphicon glyphicon-upload"></i>
+							<span>Empezar</span>
+						</button>
+					{% } %}
+					{% if (!i) { %}
+						<button class="btn btn-warning cancel">
+							<i class="glyphicon glyphicon-ban-circle"></i>
+							<span>Cancelar</span>
+						</button>
+					{% } %}
+				</td>
+			</tr>
+		{% } %}
+		{% endverbatim %}
+			</script>
+			<!-- The template to display files available for download -->
+		<script id="template-download" type="text/x-tmpl">
+		{% verbatim %}
+		{% for (var i=0, file; file=o.files[i]; i++) { %}
+			<tr class="template-download fade" idFotos="{%=file.idFotos%}" >
+				<td>
+					<span class="preview">
+						{% if (file.thumbnailUrl) { %}
+							<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img style='max-width:100px;max-height:100px;' src="{%=file.thumbnailUrl%}"></a>
+						{% } %}
+					</span>
+				</td>
+				<td>
+					<p class="name">
+						{% if (file.url) { %}
+							<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" >{%=file.name%}</a>
+						{% } else { %}
+							<span>{%=file.name%}</span>
+						{% } %}
+					</p>
+					{% if (file.error) { %}
+						<div><span class="label label-danger">Error</span> {%=file.error%}</div>
+					{% } %}
+				</td>
+				<td>
+					<span class="size">{%=o.formatFileSize(file.size)%}</span>
+				</td>
+				<td>
+					{% if (file.deleteUrl) { %}
+						<button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+							<i class="glyphicon glyphicon-trash"></i>
+							<span>Eliminar</span>
+						</button>
+					{% } else { %}
+						<button class="btn btn-warning cancel">
+							<i class="glyphicon glyphicon-ban-circle"></i>
+							<span>Cancel</span>
+						</button>
+					{% } %}
+				</td>
+			</tr>
+		{% } %}
+		{% endverbatim %}
+		</script>
+		</div>
+	</div>
+</div>
+</div>
+{% endblock %}
+{% block javascripts %} 
+{{parent()}}
+<script type="text/javascript" src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/vendor/jquery.ui.widget.js')}}"></script>
+<script type="text/javascript" src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.iframe-transport.js')}}"></script>
+<script type="text/javascript" src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload.js')}}"></script>
+
+<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/load-image.all.min.js')}}"></script>
+<!-- The Canvas to Blob plugin is included for image resizing functionality -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/canvas-to-blob.min.js')}}"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.iframe-transport.js')}}"></script>
+<!-- The basic File Upload plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload.js')}}"></script>
+<!-- The File Upload processing plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-process.js')}}"></script>
+<!-- The File Upload image preview & resize plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-image.js')}}"></script>
+<!-- The File Upload audio preview plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-audio.js')}}"></script>
+<!-- The File Upload video preview plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-video.js')}}"></script>
+<!-- The File Upload validation plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-validate.js')}}"></script>
+
+<!-- The Templates plugin is included to render the upload/download listings -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/tmpl.min.js')}}"></script>
+<!-- blueimp Gallery script -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.blueimp-gallery.min.js')}}"></script>
+<!-- The File Upload user interface plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-ui.js')}}"></script>
+<!-- The main application script -->
+<!-- script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/main.js')}}"></script	-->
+<script type="text/javascript">
+$(function () {
+		'use strict';
+		$('#fileupload').fileupload({
+			
+			formData: {tipo:'fotoUsuario', idUsuario:'{{idUsuario}}'},
+			url: '/_uploader/gallery/upload',
+			autoUpload: true,
+			acceptFileTypes: /(\.|\/)(doc?|xls?|gif|jpe?g|png|ppt?|pdf|txt|csv)$/i,
+			maxFileSize: 999000,
+			disableImageResize: /Android(?!.*Chrome)|Opera/
+				.test(window.navigator.userAgent),
+			imageMaxWidth: 1024,
+			imageMaxHeight: 768,
+		 //		 imageCrop: true, // Force cropped images
+			previewMaxWidth: 100,
+			previewMaxHeight: 100,
+			imageOrientation:true,
+			previewCrop: true
+		}).on('fileuploaddestroyed', function (e, data) {
+		});
+		
+		
+		$('#fileupload').addClass('fileupload-processing');
+		$.ajax({
+			url: '/usuarios/foto/{{idUsuario}}',
+			dataType: 'json',
+			context: $('#fileupload')[0]
+		}).always(function () {
+			$(this).removeClass('fileupload-processing');
+		}).done(function (result) {
+			$(this).fileupload('option', 'done')
+				.call(this, $.Event('done'), {result: result});
+		});
+	});			
+		
+
+	
+
+</script>
+<script src="{{ asset('public/js/formvalidation0.6.2/js/formValidation.js')}}"></script>
+<script src="{{ asset('public/js/formvalidation0.6.2/js/framework/bootstrap.js')}}"></script>
+<script src="{{ asset('public/js/formvalidation0.6.2/js/language/es_ES.js')}}"></script>
+<script src="{{ asset('public/js/formvalidation0.6.2/js/language/en_US.js')}}"></script>
+<script type="text/javascript">
+$(document).ready(function() {	
+
+$( '.modulo' ).on( 'click', function() {
+	if($(this).find('input').prop('checked') == false){
+		$(this).parent().find('input').each( function(index){
+			 $(this).prop('checked',false);
+			 $(this).prop('readonly', true);
+		});
+	}
+
+});
+$(".secciones input").change(function(){
+		if($(this).prop('checked') == true){
+			
+		$(this).closest('.modulop').find('.modulo').find('input').each( function(index){
+				 $(this).prop('checked',true);
+			});
+		
+		}
+	});
+
+	$('#usuariosForm')
+	.formValidation({
+		framework: 'bootstrap',
+		excluded: [':disabled'],
+		icon: {
+			valid: 'glyphicon glyphicon-ok',
+			invalid: 'glyphicon glyphicon-remove',
+			validating: 'glyphicon glyphicon-refresh'
+		},
+		locale: 'es_ES',
+		fields: {
+
+			'usuarios[fechaNacimiento]': {
+				validators: {
+					date: {
+						message: 'Debe ser una fecha'
+					}
+				}
+			},
+			'usuarios[email]': {
+				validators: {
+					emailAddress: {
+						  message: 'Email incorrecto'
+					},
+				}
+			},
+		    password: {
+	            validators: {
+	                identical: {
+	                    field: 'confirmPassword',
+	                    message: 'El password no coincide'
+	                },
+					 different: {
+		                 field: 'username',
+		                 message: 'El usuario y el password no pueden ser iguales'
+		             }
+	            }
+	        },
+	        'usuarios[username]': {
+	            validators: {
+	                different: {
+	                    field: 'usuarios[password]',
+	                    message: 'El usuario y el password no pueden ser iguales'
+	                }
+	            }
+	        },
+		}
+	});
+});
+</script>
+{% endblock %}
