@@ -5,27 +5,41 @@
 	<a href="obras/agregar"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar una Obra</a>
 	<div class="table-responsive">
 		<table class="table table-hover table table-condensed table table-striped">
-			<thead>
-				<th></th>
-				<th>Id</th>
-				<th>Nombre</th>
-				<th>Cliente</th>
-				<th>Direccion</th>
-				<th>Estado de la Obra</th>
-				<th>FechaI Plan</th>
-				<th>FechaI Real</th>
-				<th>FechaF Plan</th>
-				<th>Coste Real</th>
-				<th>Coste Planl</th>
-				<th></th>
+			<thead style="text-align: center;">
+				<tr>
+					<th></th>
+					<th>Id</th>
+					<th>Nombre</th>
+					<th>Cliente</th>
+					<th>Direccion</th>
+					<th>Fecha Plan</th>
+					<th>Fecha Real</th>
+					<th>Coste</th>
+					<th>Estado de la Obra</th>
+					<th></th>
+				</tr>
 			</thead>
 			<tbody>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				{% for entity in entities %}
+				<tr>
+					<td></td>
+					<td>{{ entity.id }}</td>
+					<td>{{ entity.nombre }}</td>
+					<td>{{ entity.nombreCliente }}</td>
+					<td>{{ entity.direccion}}</td>
+					<td><strong>Fecha inicio: </strong>{{ entity.fechaInicioPlan|date("m/d/Y")}} <br>
+					<strong>Fecha Fin: </strong>{{ entity.fechafinalReal|date("m/d/Y")}}</td>
+					
+					<td><strong>Fecha inicio: </strong>{{ entity.fechaInicioReal|date("m/d/Y")}}<br>
+					<strong>Fecha Fin: </strong>{{ entity.fechafinalReal|date("m/d/Y")}}</td>
+					
+					<td><strong>Coste Real: </strong>${{ entity.costeReal|number_format(2, '.', ',')}} <br>
+					<strong>Coste Planificado: </strong>${{ entity.costePlanificado|number_format(2, '.', ',')}}</td>
+					
+					<td>{{ entity.estadoObra }}</td>
+					<td><a href="/obras/editar/{{ entity.id }}"><span style="color: #000;" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
+				</tr>
+				{% endfor %}
 			</tbody>
 		</table>
 	</div>

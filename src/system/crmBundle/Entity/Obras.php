@@ -21,19 +21,19 @@ class Obras
 	 */
 	protected $nombre;
 	/**
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="date")
 	 */
 	protected $fechaInicioReal;
 	/**
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="date")
 	 */
 	protected $fechafinalReal;
 	/**
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="date")
 	 */
 	protected $fechaInicioPlan;
 	/**
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="date")
 	 */
 	protected $fechaFinalPlan;
 	/**
@@ -44,10 +44,6 @@ class Obras
 	 * @ORM\Column(type="string", length=100)
 	 */
 	protected $costeReal;
-	/**
-	 * @ORM\Column(type="string", length=100)
-	 */
-	protected $direccion;
 	/**
 	* @ORM\Column(type="string", length=100)
 	 */
@@ -76,6 +72,19 @@ class Obras
 	 * @ORM\Column(type="text")
 	 */
 	protected $notas;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	protected $fechaCreacion;
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+	protected $idUsuarioCreador;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	protected $fechaModificacion;
+
 
 
     /**
@@ -250,29 +259,6 @@ class Obras
     }
 
     /**
-     * Set direccion
-     *
-     * @param string $direccion
-     * @return Obras
-     */
-    public function setDireccion($direccion)
-    {
-        $this->direccion = $direccion;
-
-        return $this;
-    }
-
-    /**
-     * Get direccion
-     *
-     * @return string 
-     */
-    public function getDireccion()
-    {
-        return $this->direccion;
-    }
-
-    /**
      * Set idCliente
      *
      * @param string $idCliente
@@ -431,5 +417,74 @@ class Obras
     public function getNotas()
     {
         return $this->notas;
+    }
+
+    /**
+     * Set fechaCreacion
+     *
+     * @param \DateTime $fechaCreacion
+     * @return Obras
+     */
+    public function setFechaCreacion($fechaCreacion)
+    {
+        $this->fechaCreacion = $fechaCreacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaCreacion
+     *
+     * @return \DateTime 
+     */
+    public function getFechaCreacion()
+    {
+        return $this->fechaCreacion;
+    }
+
+    /**
+     * Set idUsuarioCreador
+     *
+     * @param integer $idUsuarioCreador
+     * @return Obras
+     */
+    public function setIdUsuarioCreador($idUsuarioCreador)
+    {
+        $this->idUsuarioCreador = $idUsuarioCreador;
+
+        return $this;
+    }
+
+    /**
+     * Get idUsuarioCreador
+     *
+     * @return integer 
+     */
+    public function getIdUsuarioCreador()
+    {
+        return $this->idUsuarioCreador;
+    }
+
+    /**
+     * Set fechaModificacion
+     *
+     * @param \DateTime $fechaModificacion
+     * @return Obras
+     */
+    public function setFechaModificacion($fechaModificacion)
+    {
+        $this->fechaModificacion = $fechaModificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaModificacion
+     *
+     * @return \DateTime 
+     */
+    public function getFechaModificacion()
+    {
+        return $this->fechaModificacion;
     }
 }

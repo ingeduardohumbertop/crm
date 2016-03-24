@@ -687,4 +687,73 @@ class Permisos
     {
         return $this->obrasModulo;
     }
+
+    /**
+     * Set obrasAgregar
+     *
+     * @param boolean $obrasAgregar
+     * @return Permisos
+     */
+    public function setObrasAgregar($obrasAgregar)
+    {
+        $this->obrasAgregar = $obrasAgregar;
+
+        return $this;
+    }
+
+    /**
+     * Get obrasAgregar
+     *
+     * @return boolean 
+     */
+    public function getObrasAgregar()
+    {
+        return $this->obrasAgregar;
+    }
+
+    /**
+     * Set obrasEditar
+     *
+     * @param boolean $obrasEditar
+     * @return Permisos
+     */
+    public function setObrasEditar($obrasEditar)
+    {
+        $this->obrasEditar = $obrasEditar;
+
+        return $this;
+    }
+
+    /**
+     * Get obrasEditar
+     *
+     * @return boolean 
+     */
+    public function getObrasEditar()
+    {
+        return $this->obrasEditar;
+    }
+
+    /**
+     * Set obrasEliminar
+     *
+     * @param boolean $obrasEliminar
+     * @return Permisos
+     */
+    public function setObrasEliminar($obrasEliminar)
+    {
+        $this->obrasEliminar = $obrasEliminar;
+
+        return $this;
+    }
+
+    /**
+     * Get obrasEliminar
+     *
+     * @return boolean 
+     */
+    public function getObrasEliminar()
+    {
+        return $this->obrasEliminar;
+    }
 }

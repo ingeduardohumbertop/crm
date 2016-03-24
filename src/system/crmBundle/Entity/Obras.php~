@@ -21,19 +21,19 @@ class Obras
 	 */
 	protected $nombre;
 	/**
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="date")
 	 */
 	protected $fechaInicioReal;
 	/**
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="date")
 	 */
 	protected $fechafinalReal;
 	/**
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="date")
 	 */
 	protected $fechaInicioPlan;
 	/**
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="date")
 	 */
 	protected $fechaFinalPlan;
 	/**
@@ -44,10 +44,6 @@ class Obras
 	 * @ORM\Column(type="string", length=100)
 	 */
 	protected $costeReal;
-	/**
-	 * @ORM\Column(type="string", length=100)
-	 */
-	protected $direccion;
 	/**
 	* @ORM\Column(type="string", length=100)
 	 */
@@ -76,5 +72,18 @@ class Obras
 	 * @ORM\Column(type="text")
 	 */
 	protected $notas;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	protected $fechaCreacion;
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+	protected $idUsuarioCreador;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	protected $fechaModificacion;
+
 
 }
