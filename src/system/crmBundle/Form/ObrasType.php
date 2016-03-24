@@ -25,7 +25,7 @@ class ClientesType extends AbstractType
 			->add('telefono', 'text', array('required'=>true, 'label'=>'Telefono'))
 			->add('celular', 'text', array('required'=>false, 'label'=>'Celular'))
 			->add('email', 'text', array('required'=>true, 'label'=>'Email'))
-			->add('rFC', 'text', array('required'=>false, 'label'=>'RFC')),
+			->add('rFC', 'text', array('required'=>false, 'label'=>'RFC'))
 			->add('cP', 'text', array('required'=>false, 'label'=>'CP'))
 			->add('formaPago', 'text', array('required'=>false, 'label'=>'Forma de Pago'))
 			->add('notas', 'textarea', array('attr' => array('cols' => '5', 'rows' => '5')))
