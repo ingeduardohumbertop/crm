@@ -23,7 +23,7 @@ class UsuariosController extends Controller
 		->createQueryBuilder()
 		->select('u')
 		->from('crmBundle:Usuarios', 'u')
-		->orderBy('u.fechaAlta', 'ASC')
+		->orderBy('u.fechaAlta', 'ASC')x
 		->getQuery()
 		->getResult();
 		
