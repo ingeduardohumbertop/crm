@@ -1,0 +1,88 @@
+{% extends 'crmBundle::base.html.twig' %}
+
+{% block body %}
+<div class="container">
+	<h2>{{ header }} <span style="font-size: 60%"> {{ nombre }}</span></h2>
+	<hr>
+	{{ form_start(form, {'attr': {'id': 'obrasForm'}}) }}
+	{{ form_row(form.nombre) }}
+	{{ form_row(form.fechaInicioReal) }}
+	{{ form_row(form.fechafinalReal) }}
+	{{ form_row(form.fechaInicioPlan) }}
+	{{ form_row(form.fechaFinalPlan) }}
+	<div class="form-group">
+		<label class="col-sm-2 control-label required" for="system_crmbundle_usuarios_email">Coste Real</label>
+		<div class="col-sm-10">
+			<div class="input-group">
+				<div class="input-group-addon">$</div>
+				{{ form_widget(form.costeReal) }}
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label required" for="system_crmbundle_usuarios_email">Coste Planificado</label>
+		<div class="col-sm-10">
+			<div class="input-group">
+				<div class="input-group-addon">$</div>
+				{{ form_widget(form.costePlanificado) }}
+			</div>
+		</div>
+	</div>
+	{{ form_row(form.estado) }}
+	{{ form_row(form.municipio) }}
+	{{ form_row(form.colonia) }}
+	{{ form_row(form.calle) }}
+	{{ form_row(form.estadoObra) }}
+	{{ form_row(form.notas) }}
+	{{ form_row(form.save) }}
+	{{ form_row(form._token) }}
+	{{ form_end(form, {'render_rest': true}) }}
+</div>
+{% endblock %}
+{% block javascripts %} 
+{{parent()}}
+<script src="{{ asset('public/js/jquery-2.2.0.js')}}"></script>
+<script src="{{ asset('public/js/bootstrapValidator.min.js')}}" type="text/javascript"></script>
+<script src="{{ asset('public/js/bootstrapValidator.js')}}" type="text/javascript"></script>
+<script src="{{ asset('public/js/formvalidation.js')}}"></script>
+<script src="{{ asset('public/js/formvalidation0.6.2.js')}}"></script>
+<script src="{{ asset('public/js/formvalidation0.6.2languagees_ES.js')}}"></script>
+<script src="{{ asset('public/js/formvalidation0.6.2jslanguageen_US.js')}}"></script>
+<script type="text/javascript">
+$(document).ready(function() {	
+
+		$('#obrasForm')
+		.formValidation({
+			framework: 'bootstrap',
+			excluded: [':disabled'],
+			icon: {
+				valid: 'glyphicon glyphicon-ok',
+				invalid: 'glyphicon glyphicon-remove',
+				validating: 'glyphicon glyphicon-refresh'
+			},
+			locale: 'es_ES',
+			fields: {
+				'obras[costeReal]': {
+						validators: {
+							numeric: {
+								message: 'Solo numeros',
+								thousandsSeparator: '',
+								decimalSeparator: '.'
+							}
+						}
+					},
+					'obras[costePlanificado]': {
+						validators: {
+							numeric: {
+								message: 'Solo numeros',
+								thousandsSeparator: '',
+								decimalSeparator: '.'
+							}
+						}
+					},
+				}
+		});
+	});
+</script>
+
+{% endblock %}
