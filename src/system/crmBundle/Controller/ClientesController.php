@@ -1,7 +1,7 @@
 <?php
 
 //hola liz esta es una prueva para ver que si hayas resibido la actualizacion de hace un segundo 
-
+//si tu haces una actualizacion o algo si esta bien le das comit y escribes lo que hiciste y en que parte 
 namespace system\crmBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
