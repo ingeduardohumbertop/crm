@@ -2,6 +2,7 @@
 
 //hola liz esta es una prueva para ver que si hayas resibido la actualizacion de hace un segundo 
 //si tu haces una actualizacion o algo si esta bien le das comit y escribes lo que hiciste y en que parte 
+// despues para actualizar haces lo que yo hize le das en team uy pull y recibiras actualizaciones q hize yo 
 namespace system\crmBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
