@@ -82,3 +82,11 @@ ClientesEditar:
 ObrasIndex:
     path:     /obras
     defaults: { _controller: crmBundle:Obras:index}
+ObrasAgregar:
+    path:     /obras/agregar
+    defaults: { _controller: crmBundle:Obras:handler}
+ObrasEditar:
+    path:     /obras/editar/{idObra}
+    defaults: { _controller: crmBundle:Obras:handler}
+    requirements:
+        idObra:  \d+

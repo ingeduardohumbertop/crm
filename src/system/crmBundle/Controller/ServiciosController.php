@@ -94,8 +94,8 @@ class ServiciosController extends Controller
 			<ul class='nav navbar-nav navbar-left'>
 				$menuHome
 				$menuClientes
-				$menuInventario
 				$menuObras
+				$menuInventario
 				$menuOpciones
 			</ul>";
 		

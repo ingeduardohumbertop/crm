@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ClientesType extends AbstractType
+class ObrasType extends AbstractType
 {
 	/**
 	* @param FormBuilderInterface $builder
@@ -20,13 +20,13 @@ class ClientesType extends AbstractType
 			->add('fechafinalReal', 'date', array('required' => false,'widget' => 'single_text', 'format' => 'yyyy-MM-dd',))
 			->add('fechaInicioPlan', 'date', array('required' => false,'widget' => 'single_text', 'format' => 'yyyy-MM-dd',))
 			->add('fechaFinalPlan', 'date', array('required' => false,'widget' => 'single_text', 'format' => 'yyyy-MM-dd',))
-			->add('costePlanificado','text', array('required'=>false, 'label'=>'Apellido Materno'))
-			->add('costeReal', 'text', array('required'=>true, 'label'=>utf8_decode('Calle')))
-			->add('estado	', 'text', array('required'=>true, 'label'=>utf8_decode('Municipio')))
-			->add('municipio', 'text', array('required'=>true, 'label'=>utf8_decode('Estado')))
-			->add('colonia', 'text', array('required'=>true, 'label'=>'Telefono'))
-			->add('calle', 'text', array('required'=>false, 'label'=>'Celular'))
-			->add('estadoObra', 'text', array('required'=>true, 'label'=>'Email'))
+			->add('costePlanificado','text', array('required'=>false, 'label'=>'Coste Planificado'))
+			->add('costeReal', 'text', array('required'=>true, 'label'=>utf8_decode('Coste Real')))
+			->add('estado', 'text', array('required'=>true, 'label'=>utf8_decode('Estado')))
+			->add('municipio', 'text', array('required'=>true, 'label'=>utf8_decode('Municipio')))
+			->add('colonia', 'text', array('required'=>true, 'label'=>'Colonia'))
+			->add('calle', 'text', array('required'=>false, 'label'=>'Calle'))
+			->add('estadoObra', 'text', array('required'=>true, 'label'=>'Estado de Obra'))
 			->add('notas', 'textarea', array('attr' => array('cols' => '5', 'rows' => '5')))
 			//   ->add('status','choice', array(array('choices' => array('1' => 'Activo', '0' => 'Inactivo'),
 				//'required'=>true)))
@@ -40,7 +40,7 @@ class ClientesType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'system\crmBundle\Entity\Clientes'
+            'data_class' => 'system\crmBundle\Entity\Obras'
         ));
     }
 
@@ -49,6 +49,6 @@ class ClientesType extends AbstractType
      */
     public function getName()
     {
-        return 'clientes';
+        return 'obras';
     }
 }
