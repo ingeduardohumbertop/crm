@@ -1,4 +1,13 @@
 {% extends 'crmBundle::base.html.twig' %}
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('public/js/nicolasbize-magicsuggest-230b08b/magicsuggest-min.css')}}">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<style>
+<!--
+-->
+</style>
+{% endblock %}
 {% block body %}
 <div class="container-fluid">
 	<h2>Provedores</h2>
@@ -7,46 +16,192 @@
 		<li role="presentation" class="active"><a href="#provedores" aria-controls="provedores" role="tab" data-toggle="tab">Inventario</a></li>
 		<li role="presentation"><a href="#busqueda" aria-controls="busqueda" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Busqueda</a></li>
 	</ul>
-	<table  class="table table-hover table table-condensed table table-striped">
-		<thead style="text-align:center;">
-{% if permisos.provedoresEliminar==1%}<td></td>{% endif %}
-			<th>Nombre</th>
-			<th>Vendedor</th>
-			<th>Direccion</th>
-			<th>Contacto</th>
-			<th>Ramo</th>
-			<th>FormaPago</th>
-{% if permisos.provedoresEditar==1%}<th>Editar</th>{% endif %}
-		</thead>
-		{% for entity in entities %}
-		<tr>
-{% if permisos.provedoresEliminar==1%}<td><a href="/provedores/eliminar/{{ entity.id }}"><span style="color: red;" class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>{% endif %}
-			<td>{{ entity.nombre }}<br>
-			{% if entity.web !=''%}
-				<span style="font-weight: bold;">Web:</span><a href="{{ entity.web}}">{{ entity.web}}</a>
-			{% endif %}
-			</td>	
-			<td>{{ entity.contacto }}</td>	
-			<td>{{ entity.direccion }} {{ entity.municipio }} {{ entity.estado }}</td>	
-			<td>
-			{% if entity.telefono !=''%}
-				<span style="font-weight: bold;">Telefono:</span>{{ entity.telefono}}<br>
-			{% endif %}
-			{% if entity.telefono2 !=''%}
-				<span style="font-weight: bold;">Telefono2:</span>{{ entity.telefono2}}<br>
-			{% endif %}
-			{% if entity.otro !=''%}
-				<span style="font-weight: bold;">Otro:</span>{{ entity.otro}}<br>
-			{% endif %}
-			{% if entity.email !=''%}
-				<span style="font-weight: bold;">email:</span>{{ entity.email}}<br>
-			{% endif %}
-			</td>	
-			<td>{{ entity.ramo }}</td>	
-			<td>{{ entity.formaPago }}</td>	
-{% if permisos.provedoresEditar==1%}<td><a href="/provedores/editar/{{ entity.id }}"><button class="btn btn-info"><span style="color: #000;" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button></a></td>{% endif %}
-		</tr>
-		{% endfor %}
-	</table>
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="provedores">
+			<table  class="table table-hover table table-condensed table table-striped" style="text-transform: lowercase;">
+				<thead style="text-align:center;">
+					{% if permisos.provedoresEliminar==1%}<td></td>{% endif %}
+					<th>Nombre</th>
+					<th>Vendedor</th>
+					<th>Direccion</th>
+					<th>Contacto</th>
+					<th>Ramo</th>
+					<th>FormaPago</th>
+					{% if permisos.provedoresEditar==1%}<th>Editar</th>{% endif %}
+				</thead>
+				<tbody>
+				{% for entity in entities %}
+				<tr>
+					{% if permisos.provedoresEliminar==1%}<td><a href="/provedores/eliminar/{{ entity.id }}"><span style="color: red;" class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>{% endif %}
+					<td>{{ entity.nombre }}<br>
+					{% if entity.web !=''%}
+						<span style="font-weight: bold;">Web:</span><a href="{{ entity.web}}">{{ entity.web}}</a>
+					{% endif %}
+					</td>	
+					<td><span >{{ entity.contacto }}</span></td>	
+					<td><span>{{ entity.direccion }} {{ entity.municipio }} {{ entity.estado }}</span></td>	
+					<td>
+					{% if entity.telefono !=''%}
+						<span style="font-weight: bold;">Telefono:</span>{{ entity.telefono}}<br>
+					{% endif %}
+					{% if entity.telefono2 !=''%}
+						<span style="font-weight: bold;">Telefono2:</span>{{ entity.telefono2}}<br>
+					{% endif %}
+					{% if entity.otro !=''%}
+						<span style="font-weight: bold;">Otro:</span>{{ entity.otro}}<br>
+					{% endif %}
+					{% if entity.email !=''%}
+						<span style="font-weight: bold;">email:</span>{{ entity.email}}<br>
+					{% endif %}
+					</td>	
+					<td><span>{{ entity.ramo }}</span></td>	
+					<td><span>{{ entity.formaPago }}</span></td>	
+		{% if permisos.provedoresEditar==1%}<td><a href="/provedores/editar/{{ entity.id }}"><button class="btn btn-info"><span style="color: #000;" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button></a></td>{% endif %}
+				</tr>
+				</tbody>
+				{% endfor %}
+			</table>
+		</div>
+		 <div role="tabpanel" class="tab-pane" id="busqueda">
+			<h4>Busqueda de Provedores Por:</h4>
+			<div class="row bg-info" style="padding:20px;">
+				<div class="col-sm-4">Nombre
+				<input id='nombreBusqueda' class='busqueda form-control'>
+				</div>
+				<div class="col-sm-4">Contacto
+				<input id='contactoBusqueda' class='busqueda form-control'>
+				</div>
+				<div class="col-sm-4">Telefono
+				<input id='telefonoBusqueda' class='busqueda form-control'>
+				</div>
+				<div class="col-sm-4">Estado
+				<select class='busqueda form-control' id='estadoBusqueda'>
+					<option value="">Seleccionar</option>
+					{% for estado in estados %}
+						<option value="{{ estado.estado }}">{{ estado.estado }}</option>
+					{% endfor %}
+				</select>
+				</div>
+				<div class="col-sm-4">Muicipio
+				<select class='busqueda form-control' id='municipioBusqueda'>
+					<option value="">Seleccionar</option>
+					{% for municipio in municipios %}
+						<option value="{{ municipio.municipio }}">{{ municipio.municipio }}</option>
+					{% endfor %}
+				</select>
+				</div>
+				<div class="col-sm-4">Ramo
+				<input id='ramoBusqueda' class='busqueda form-control' style="display: none;">
+				<div id="ramos"></div>
+				</div>
+			</div>
+			<table  class="table table-hover table table-condensed table table-striped" style="text-transform: lowercase;">
+				<thead style="text-align:center;">
+					<th>Id</th>
+					<th>Nombre</th>
+					<th>Vendedor</th>
+					<th>Direccion</th>
+					<th>Contacto</th>
+					<th>Ramo</th>
+					<th>FormaPago</th>
+				</thead>
+				<tbody id="provedoresResultados">
+				</tbody>
+			</table>
+		 </div>
+	</div>
 </div>
+<script id="provedoresGuardados-tmpl" type="text/x-tmpl">
+{% verbatim %}
+{% for (var i=0; i<o.provedores.length; i++) { %}
+	<tr>
+		<td>{%=o.provedores[i].id%}</td>
+		<td>{%=o.provedores[i].nombre%}</td>
+		<td>{%=o.provedores[i].contacto%}</td>
+		<td>{%=o.provedores[i].direccion%}</td>
+		<td>
+			{% if (o.provedores[i].telefono !='' && o.provedores[i].telefono !=null) { %}
+				<span style="font-weight: bold;">Telfono: </span>{%=o.provedores[i].telefono%}<br>
+			{% } %}
+			{% if (o.provedores[i].telefono2 !='' && o.provedores[i].telefono2 !=null) { %}
+				<span style="font-weight: bold;">Telefono2: </span>{%=o.provedores[i].telefono2%}<br>
+			{% } %}
+			{% if (o.provedores[i].otro !='' && o.provedores[i].otro !=null) { %}
+				<span style="font-weight: bold;">Otro: </span>{%=o.provedores[i].otro%}<br>
+			{% } %}
+			{% if (o.provedores[i].email !='' && o.provedores[i].email !=null) { %}
+				<span style="font-weight: bold;">Email: </span>{%=o.provedores[i].email%}<br>
+			{% } %}
+		</td>
+		<td>{%=o.provedores[i].ramo%}</td>
+		<td>{%=o.provedores[i].formaPago%}</td>
+		<td><a class="btn btn-info" href='/provedores/editar/{%=o.provedores[i].id%}'><span style="color: #000;" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></td>
+	</tr>
+{% } %}
+{% endverbatim %}
+</script>
+
+{% endblock %}
+{% block javascripts %} 
+{{parent()}}
+<script src="{{ asset('public/js/jquery-2.2.0.js')}}"></script>
+<script type="text/javascript" src="{{ asset('public/js/nicolasbize-magicsuggest-230b08b/magicsuggest.js')}}"></script>
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/tmpl.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('public/js/debounce/jquery.ba-throttle-debounce.min.js')}}"></script>
+<script type="text/javascript">
+$(document).ready(function() {	
+	
+$('.busqueda').keypress ($.debounce( 250, buscarprobedores ) );
+$('.busqueda').keyup( $.debounce( 250, buscarprobedores ) );
+$('.busqueda').change( $.debounce( 250, buscarprobedores ) );
+	
+	function buscarprobedores() {
+
+		$.ajax({//mandar cambios a bd
+			type: "POST",
+			url: "/provedores/buscarJson",
+				beforeSend: function( xhr ) {
+				var html= "<tr><td colspan='10' style='text-align:center;'><img src='/img/loading.gif' width='60px' ></td></tr>";
+				$('#provedoresResultados').html(html);
+			},
+			//contentType:'application/json',
+			//data: JSON.stringify(jsonObj),
+			data: { 
+				nombre: $('#nombreBusqueda').val(), 
+				contacto: $('#contactoBusqueda').val(), 
+				telefono: $('#telefonoBusqueda').val(), 
+				estado: $('#estadoBusqueda').val(), 
+				municipio: $('#municipioBusqueda').val(), 
+				ramo: $('#ramoBusqueda').val(),
+				},
+			dataType:'json'
+		}).done(function( json ) {
+			
+			document.getElementById("provedoresResultados").innerHTML = tmpl("provedoresGuardados-tmpl", json);
+		});
+		
+	};
+	if($('#ramoBusqueda').val()==''){
+			var split=null;
+		}else{
+			 var split = $('#ramoBusqueda').val().split(",");
+		}
+		var msetiquetas = $('#ramos').magicSuggest ({
+					name: 'texto', 
+					data: '/provedores/getRamo',
+					placeholder: 'Agrega un ramo',
+					maxSelection: 1,		
+					expandOnFocus: false,
+					highlight: false,
+					value: (split)
+					});
+					$(msetiquetas).on('selectionchange', function(e,m){	
+					//  alert(JSON.stringify(this.getValue()));
+						  var valor = this.getValue();
+						 $('#ramoBusqueda').val(valor);
+						 buscarprobedores()
+					});
+});
+</script>
+
 {% endblock %}

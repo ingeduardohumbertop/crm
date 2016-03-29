@@ -11,26 +11,45 @@ use system\crmBundle\Form\ProvedoresType;
 
 class ProvedoresController extends Controller
 {
-	
-	
-    public function indexAction(){
-    	$user=$this->getUser();
-    	$permisos= $this->get('crm.servicios_controller')->getPermisos($user);
-    	if(!$permisos->getprovedoresModulo() ){
-    		$this->get('session')->getFlashBag()->add('error','No tienes permisos para ver este modulo ');
-    		return $this->redirect($this->generateUrl('index'));
-    	}
-    	$provedores = $this->getDoctrine()->getManager()
-    	->createQueryBuilder()
-    	->select('p')
-    	->from('crmBundle:Provedores', 'p')
-    	->orderBy('p.fechaModificacion', 'DESC')
-    	->getQuery()
-    	->getResult();
+	public function indexAction(){
+		$user=$this->getUser();
+		$permisos= $this->get('crm.servicios_controller')->getPermisos($user);
+		if(!$permisos->getprovedoresModulo() ){
+			$this->get('session')->getFlashBag()->add('error','No tienes permisos para ver este modulo ');
+			return $this->redirect($this->generateUrl('index'));
+		}
+		$provedores = $this->getDoctrine()->getManager()
+		->createQueryBuilder()
+		->select('p')
+		->from('crmBundle:Provedores', 'p')
+		->orderBy('p.fechaModificacion', 'DESC')
+		->getQuery()
+		->getResult();
+		    	
+		$estados=$this->getDoctrine()->getManager()
+		->createQueryBuilder()
+		->select('p.estado')
+		->distinct()
+		->from('crmBundle:Provedores', 'p')
+		->orderBy('p.estado', 'DESC')
+		->getQuery()
+		->getResult();
+		
+		$municipio=$this->getDoctrine()->getManager()
+		->createQueryBuilder()
+		->select('p.municipio')
+		->distinct()
+		->from('crmBundle:Provedores', 'p')
+		->orderBy('p.municipio', 'DESC')
+		->getQuery()
+		->getResult();
+    	
     	return $this->render('crmBundle:Provedores:index.html.twig', array (
     			'mainMenu'=> $this->get('crm.servicios_controller')->getMainMenu($user,'provedores'),
     			'permisos'=>$permisos,
-    			'entities'=>$provedores
+    			'entities'=>$provedores,
+    			'estados'=>$estados,
+    			'municipios'=>$municipio
     	));
     		
     }
@@ -106,6 +125,121 @@ class ProvedoresController extends Controller
     	$this->get('session')->getFlashBag()->add('mensaje','El Provedor se a borrado de esta lista');
     	return $this->redirectToRoute('ProvedoresIndex');
     	
+    }
+    public function getramoAction(){
+    	$user=$this->getUser();
+    	$provedoresRamo = $this->getDoctrine()->getManager()
+    	->createQueryBuilder()
+    	->select('p.ramo')
+    	->distinct()
+    	->from('crmBundle:Provedores', 'p')
+    	->orderBy('p.ramo', 'DESC')
+    	->getQuery()
+    	->getResult();
+    	
+    	$etiquetasArray= array();
+    	foreach ($provedoresRamo as $ramo){
+    		$etiquetasExplode = explode( ',', $ramo['ramo'] );
+    		foreach ($etiquetasExplode as $explode){
+    			array_push($etiquetasArray, $explode);
+    		}
+    	}
+    	$etiquetasArray=array_unique($etiquetasArray);
+    	$etiquetasArray=array_values($etiquetasArray);
+    	$response = new JsonResponse();
+    	$response->setData($etiquetasArray);
+    	return $response;
+    	
+    }
+    public function buscarAction(Request $request){
+    	$user = $this->getUser();
+    	$permisos=$this->get('crm.servicios_controller')->getPermisos($user);
+    	
+    	$nombre=$request->get('nombre');
+    	$contacto=$request->get('contacto');
+    	$telefono=$request->get('telefono');
+    	$estado=$request->get('estado');
+    	$municipio=$request->get('municipio');
+    	$ramo=$request->get('ramo');
+    	
+    	
+    	if($nombre.$contacto.$telefono.$estado.$municipio.$ramo==''){
+    		$response = new JsonResponse();
+    		$response->setData(array('provedores'=>array()));
+    		return $response;
+    	}
+    	
+    	$parameters = array();
+    	
+    	if($nombre!=''){
+    		$parameters['nombre']="%$nombre%";
+    		$nombreP= ' p.nombre like :nombre ';
+    	}else $nombreP='';
+    	if($contacto!=''){
+    		$parameters['contacto']="%$contacto%";
+    		$contactoP=' p.contacto like :contacto ';
+    		$nombreP == '' ? $contactoP : $contactoP=" and $contactoP";
+    	}else $contactoP='';
+    	if($telefono!=''){
+    		$parameters['telefono']="%$telefono%";
+    		$telefonoP=' p.telefono like :telefono ';
+    		$nombreP.$contactoP == '' ? $telefonoP : $telefonoP=" and $telefonoP";
+    	}else $telefonoP='';
+    	if($estado!=''){
+    		$parameters['estado']="%$estado%";
+    		$estadoP=' p.estado like :estado ';
+    	}else $estadoP='';
+    	if($municipio!=''){
+    		$parameters['municipio']="%$municipio%";
+    		$municipioP=' p.municipio like :municipio ';
+    		$estadoP == '' ? $municipioP : $municipioP=" and $municipioP";
+    	}else $municipioP='';
+    	if($ramo!=''){
+    		$parameters['ramo']="%$ramo%";
+    		$ramoP=' p.ramo like :ramo ';
+    		$estadoP.$municipioP == '' ? $ramoP : $ramoP=" and $ramoP";
+    	}else $ramoP='';
+    	
+    	$nombreP.$contactoP.$telefonoP == '' ? $datosPrincipales='' : $datosPrincipales= " ( $nombreP $contactoP $telefonoP )";
+    	$estadoP.$municipioP.$ramoP== '' ? $datosSecundarios='' : $datosSecundarios="  ( $estadoP $municipioP $ramoP )";
+    	
+    	($datosPrincipales !='' and $datosSecundarios!='') ?  $datosSecundarios = ' and '.$datosSecundarios : true;
+    	
+    	$em = $this->getDoctrine()->getManager();
+    	//fullquery
+    	$query = $em->createQueryBuilder()
+    	->select("
+				p.id, p.nombre, p.contacto,
+				p.ramo, CONCAT(p.direccion,' ', p.municipio,' ', p.estado) as direccion, p.telefono, p.telefono2, p.otro, p.ramo,
+				p.formaPago , p.email, p.web" )
+    					->from('crmBundle:Provedores', 'p')
+    					->where("$datosPrincipales $datosSecundarios")
+    	->setParameters($parameters)
+    	->setMaxResults( 30 )
+    	->getQuery();
+    	
+    	$probedoresResultados=$query->getResult();
+    	$responseArray= array();
+    	foreach ($probedoresResultados as $datos){
+    		$responseArray[]= array(
+    				'id'=>$datos['id'],
+    				'nombre'=>$datos['nombre'],
+    				'contacto'=>$datos['contacto'],
+    				'ramo'=>$datos['ramo'],
+    				'direccion'=>$datos['direccion'],
+    				'telefono'=>$datos['telefono'],
+    				'telefono2'=>$datos['telefono2'],
+    				'otro'=>$datos['otro'],
+    				'ramo'=>$datos['ramo'],
+    				'formaPago'=>$datos['formaPago'],
+    				'email'=>$datos['email'],
+    				'web'=>$datos['web'],
+    		);
+    	}
+    	
+    	$response = new JsonResponse();
+    	$response->setData(array('provedores'=>$responseArray));
+    	return $response;
     }
 		
     

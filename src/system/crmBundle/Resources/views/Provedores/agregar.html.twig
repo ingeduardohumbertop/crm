@@ -1,5 +1,11 @@
 {% extends 'crmBundle::base.html.twig' %}
 
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('public/js/nicolasbize-magicsuggest-230b08b/magicsuggest-min.css')}}">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+{% endblock %}
 {% block body %}
 <div class="container">
 	<h2>{{ header }} <span style="font-size: 60%"> {{ nombre }}</span></h2>
@@ -22,6 +28,12 @@
 		</div>
 	</div>
 	{{ form_row(form.otro) }}
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="ramo">Ramo<img src='/img/loading.gif' style='display:none;' id='loading'></label>
+		<div class="col-sm-10">
+			<div id="ramos"></div>
+		</div>
+	</div>
 	{{ form_row(form.ramo) }}
 	{{ form_row(form.formaPago) }}
 	{{ form_row(form.web) }}
@@ -39,6 +51,7 @@
 <script src="{{ asset('public/js/formvalidation0.6.2.js')}}"></script>
 <script src="{{ asset('public/js/formvalidation0.6.2languagees_ES.js')}}"></script>
 <script src="{{ asset('public/js/formvalidation0.6.2jslanguageen_US.js')}}"></script>
+<script type="text/javascript" src="{{ asset('public/js/nicolasbize-magicsuggest-230b08b/magicsuggest.js')}}"></script>
 <script type="text/javascript">
 $(document).ready(function() {	
 
@@ -64,6 +77,28 @@ $(document).ready(function() {
 				},
 			}
 		});
+		
+		if($('#provedores_ramo').val()==''){
+			var split=null;
+		}else{
+			 var split = $('#provedores_ramo').val().split(",");
+		}
+		var msetiquetas = $('#ramos').magicSuggest ({
+					name: 'texto', 
+					data: '/provedores/getRamo',
+					placeholder: 'Agrega un ramo',
+					maxSelection: 10,		
+					expandOnFocus: false,
+					highlight: false,
+					value: (split)
+					});
+					$(msetiquetas).on('selectionchange', function(e,m){	
+					//  alert(JSON.stringify(this.getValue()));
+						  var valor = this.getValue();
+						 $('#provedores_ramo').val(valor);
+					});
+
+			     
 	});
 </script>
 

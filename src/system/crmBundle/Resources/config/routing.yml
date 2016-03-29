@@ -48,6 +48,12 @@ ProvedoresEliminar:
     defaults: { _controller: crmBundle:Provedores:eliminar}
     requirements:
         idProvedor:  \d+
+ProvedoresRamo:
+    path:     /provedores/getRamo
+    defaults: { _controller: crmBundle:Provedores:getRamo}
+ProvedoresBuscar:
+    path:     /provedores/buscarJson
+    defaults: { _controller: crmBundle:Provedores:buscar}
 MaquinariaIndex:
     path:     /maquinaria
     defaults: { _controller: crmBundle:Maquinaria:index}
