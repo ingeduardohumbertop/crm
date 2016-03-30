@@ -1,5 +1,5 @@
 <?php 
-//C:\Users\EduardoHumberto\Desktop\SCAOcrm
+//C:\Users\EduardoHumberto\Desktop\PROYECTOS\SCAOcrm>
 //php app/console doctrine:generate:entities system/crmBundle/Entity
 namespace system\crmBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
@@ -68,6 +68,14 @@ class Maquinaria
 	 * @ORM\Column(type="text")
 	 */
 	protected $notas;
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+	protected $orden;
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+	protected $idUsuario;
 
 
 
@@ -378,5 +386,51 @@ class Maquinaria
     public function getNotas()
     {
         return $this->notas;
+    }
+
+    /**
+     * Set orden
+     *
+     * @param integer $orden
+     * @return Maquinaria
+     */
+    public function setOrden($orden)
+    {
+        $this->orden = $orden;
+
+        return $this;
+    }
+
+    /**
+     * Get orden
+     *
+     * @return integer 
+     */
+    public function getOrden()
+    {
+        return $this->orden;
+    }
+
+    /**
+     * Set idUsuario
+     *
+     * @param integer $idUsuario
+     * @return Maquinaria
+     */
+    public function setIdUsuario($idUsuario)
+    {
+        $this->idUsuario = $idUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get idUsuario
+     *
+     * @return integer 
+     */
+    public function getIdUsuario()
+    {
+        return $this->idUsuario;
     }
 }

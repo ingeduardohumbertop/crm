@@ -72,7 +72,10 @@ class Provedores
 	 * @ORM\Column(type="datetime")
 	 */
 	protected $fechaModificacion;
-
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+	protected $orden;
   
 
     /**
@@ -405,5 +408,28 @@ class Provedores
     public function getFechaModificacion()
     {
         return $this->fechaModificacion;
+    }
+
+    /**
+     * Set orden
+     *
+     * @param integer $orden
+     * @return Provedores
+     */
+    public function setOrden($orden)
+    {
+        $this->orden = $orden;
+
+        return $this;
+    }
+
+    /**
+     * Get orden
+     *
+     * @return integer 
+     */
+    public function getOrden()
+    {
+        return $this->orden;
     }
 }

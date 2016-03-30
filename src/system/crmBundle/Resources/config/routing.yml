@@ -54,6 +54,9 @@ ProvedoresRamo:
 ProvedoresBuscar:
     path:     /provedores/buscarJson
     defaults: { _controller: crmBundle:Provedores:buscar}
+ProvedoresReorder:
+    path:     /provedores/reorder
+    defaults: { _controller: crmBundle:Provedores:reorden}
 MaquinariaIndex:
     path:     /maquinaria
     defaults: { _controller: crmBundle:Maquinaria:index}
@@ -74,6 +77,18 @@ MauinariaEliminar:
     defaults: { _controller: crmBundle:Maquinaria:eliminar}
     requirements:
         idMaquinaria:  \d+
+MaquinariaImprimirIncentario:
+    path:     /maquinaria/descargarInventario
+    defaults: { _controller: crmBundle:Maquinaria:descargarinventario}
+MaquinariaBusqueda:
+    path:     /maquinaria/buscarJson
+    defaults: { _controller: crmBundle:Maquinaria:busqueda}
+MaquinariaBusquedaNombre:
+    path:     /maquinaria/nombreBusqueda
+    defaults: { _controller: crmBundle:Maquinaria:busquedanombre}
+MaquinariaReorden:
+    path:     /maquinaria/reorder
+    defaults: { _controller: crmBundle:Maquinaria:reorden}
 ClientesIndex:
     path:     /clientes
     defaults: { _controller: crmBundle:Clientes:index}

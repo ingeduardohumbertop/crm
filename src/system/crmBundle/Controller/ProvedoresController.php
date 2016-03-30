@@ -22,7 +22,7 @@ class ProvedoresController extends Controller
 		->createQueryBuilder()
 		->select('p')
 		->from('crmBundle:Provedores', 'p')
-		->orderBy('p.fechaModificacion', 'DESC')
+		->orderBy('p.orden', 'ASC')
 		->getQuery()
 		->getResult();
 		    	
@@ -241,6 +241,33 @@ class ProvedoresController extends Controller
     	$response->setData(array('provedores'=>$responseArray));
     	return $response;
     }
-		
+	
+    public function reordenAction(Request $request) {
+    	$content = $request->getContent();
+    	if (!empty($content)){
+    		$params = json_decode($content, true); // 2nd param to get as array
+    	}
+    	$em = $this->getDoctrine()->getManager();
+    	$user = $this->getUser();
+    
+    	foreach ($params as $item){
+    		$idProvedores= $item['idProvedor'];
+    		$orden= $item['orden'];
+    		$query = $em->createQuery(
+    				'UPDATE
+				crmBundle:Provedores p
+				SET  p.orden=  :orden
+				WHERE p.id = :idProvedores')
+    				->setParameters(array(
+    						'idProvedores'=> $idProvedores,
+    						'orden'=>$orden,));
+    				$query->execute();
+    	}
+    	$response = new JsonResponse();
+    	$response->setData(array(
+    			'success' => 1
+    	));
+    	return $response;
+    }
     
 }

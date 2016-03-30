@@ -1,69 +1,228 @@
 {% extends 'crmBundle::base.html.twig' %}
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('public/js/nicolasbize-magicsuggest-230b08b/magicsuggest-min.css')}}">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+{% endblock %}
 {% block body %}
 <div class="container-fluid">
 	<h2>Maquinaria</h2>
-	{% if permisos.maquinariaAgregar == 1%}<a href="/maquinaria/agregar"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar Maquinaria</a>{% endif %}
-	<div role="tabpanel">	
-		<ul id="myTab" class="nav nav-tabs" role="tablist">
-			<li role="presentation" class="active"><a href="#informacion" aria-controls="informacion" role="tab" data-toggle="tab">Inventtario de maquinaria</a></li>
-			<li role="presentation"><a href="#foto" aria-controls="busqueda" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Busqueda</a></li>
-		</ul>
+	{% if permisos.maquinariaAgregar == 1%}<a href="/maquinaria/agregar"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar Maquinaria</a>{% endif %}	
+	<ul id="myTab" class="nav nav-tabs" role="tablist">
+		<li role="presentation" class="active"><a href="#maquinaria" aria-controls="maquinaria" role="tab" data-toggle="tab">Inventario</a></li>
+		<a href="/maquinaria/descargarInventario" class="btn btn-default" role="button">Descargar Inventario</a>
+	</ul>
 	<div class="tab-content">
-		<div role="tabpanel" class="tab-pane active" id="informacion">
-			<table  class="table table-hover table table-condensed table table-striped">
-				<thead>
-		{% if permisos.maquinariaEliminar==1%}<td></td>{% endif %}
-					<th>ECO</th>
-					<th>No Serie</th>
-					<th>Nombre</th>
-					<th>A&ntilde;os</th>
-					<th>Modelo</th>
-					<th>Status</th>
-					<th>Marca</th>
-					<th>Activa</th>
-		{% if permisos.maquinariaEditar==1%}<th>Editar</th>{% endif %}
-				</thead>
-				{% for entity in entities %}
-				<tr>
-		{% if permisos.maquinariaEliminar==1%}<td><a href="/maquinaria/eliminar/{{ entity.id }}"><span style="color: red;" class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>{% endif %}
-					<td>{{ entity.eco }}</td>	
-					<td>{{ entity.numeroSerie }}</td>	
-					<td>{{ entity.nombre }}</td>	
-					<td>{{ entity.years }}</td>	
-					<td>{{ entity.modelo }}</td>	
-					<td>{{ entity.status }}</td>	
-					<td>{{ entity.marca }}</td>	
-					<td>{% if permisos.maquinariaEditar==1%}
-						<input type ="checkbox" {% if entity.isActive ==1 %} checked="checked"{% endif %}class="isActive" idMaquinaria="{{ entity.id}}">
-						{% else %}
-							{% if entity.isActive ==1 %}
-								<span style="color:#5cb85c; " class="glyphicon glyphicon-ok" aria-hidden="true"></span
-							{% else %}
-								<span style="color: red;" class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-							{% endif %}	
-						{% endif %}	
-					 </td>
-		{% if permisos.maquinariaEditar==1%}
-			<td><a href="/maquinaria/editar/{{ entity.id }}"><button class="btn btn-info"><span style="color: #000;" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button></a></td>
-			{% endif %}
-				</tr>
-				{% endfor %}
-			</table>
-		</div>
-		<div role="tabpanel" class="tab-pane" id="busqueda">
+		<div role="tabpanel" class="tab-pane active" id="maquinaria">
+			<ul id="myTab" class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#activas" aria-controls="activas" role="tab" data-toggle="tab">Activas</a></li>
+				<li role="presentation"><a href="#inactivas" aria-controls="inactivas" role="tab" data-toggle="tab">Inactivas</a></li>
+				<li role="presentation"><a href="#busqueda" aria-controls="busqueda" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Busqueda</a></li>
+			</ul>
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="activas">
+					<div class="table-responsive">
+						<table  class="table table-hover table table-condensed table table-striped">
+							<thead style="background: #d9edf7;  text-transform: capitalize;">
+							{% if permisos.maquinariaEliminar==1%}<td></td>{% endif %}
+								<th>Orden</th>
+								<th>ECO</th>
+								<th>No Serie</th>
+								<th>Nombre</th>
+								<th>A&ntilde;os</th>
+								<th>Modelo</th>
+								<th>Status</th>
+								<th>Marca</th>
+								<th>Activa</th>
+							{% if permisos.maquinariaEditar==1%}<th>Editar</th>{% endif %}
+							</thead>
+							<tbody style="text-transform: capitalize;" id='sortableTable'>
+							{% for entity in entities %}
+								{% if entity.isActive == 1 %}
+								<tr idMaquinaria="{{ entity.id}}">
+								{% if permisos.maquinariaEliminar==1%}<td><a href="/maquinaria/eliminar/{{ entity.id }}"><span style="color: red;" class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>{% endif %}
+									<td style="text-align: center;"><span class="orden">{{ entity.orden }}</td>	
+									<td>{{ entity.eco }}</td>	
+									<td>{{ entity.numeroSerie }}</td>	
+									<td>{{ entity.nombre }}</td>	
+									<td>{{ entity.years }}</td>	
+									<td>{{ entity.modelo }}</td>	
+									<td>{{ entity.status }}</td>	
+									<td>{{ entity.marca }}</td>	
+									<td style="text-align: center;">{% if permisos.maquinariaEditar==1%}
+									<input type ="checkbox" {% if entity.isActive ==1 %} checked="checked"{% endif %}class="isActive" idMaquinaria="{{ entity.id}}">
+								{% else %}
+									{% if entity.isActive ==1 %}
+										<span style="color:#5cb85c; " class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+									{% else %}
+										<span style="color: red;" class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+									{% endif %}	
+								{% endif %}	
+									 </td>
+									{% if permisos.maquinariaEditar==1%}
+										<td style="text-align: center;"><a href="/maquinaria/editar/{{ entity.id }}"><span style="color: #000;" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
+								{% endif %}
+								</tr>
+								{% endif %}
+							{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="inactivas">
+					<div class="table-responsive">
+						<table class="table table-hover table table-condensed table table-striped" style="overflow: auto;">
+							<thead style="background: #f2dede;  text-transform: capitalize;">
+							{% if permisos.maquinariaEliminar==1%}<td></td>{% endif %}
+								<th>ECO</th>
+								<th>No Serie</th>
+								<th>Nombre</th>
+								<th>A&ntilde;os</th>
+								<th>Modelo</th>
+								<th>Status</th>
+								<th>Marca</th>
+								<th>Activa</th>
+							{% if permisos.maquinariaEditar==1%}<th>Editar</th>{% endif %}
+							</thead>
+							<tbody>
+							{% for entity in entities %}
+								{% if entity.isActive != 1 %}
+									<tr>
+									{% if permisos.maquinariaEliminar==1%}<td><a href="/maquinaria/eliminar/{{ entity.id }}"><span style="color: red;" class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>{% endif %}
+										<td>{{ entity.eco }}</td>	
+										<td>{{ entity.numeroSerie }}</td>	
+										<td>{{ entity.nombre }}</td>	
+										<td>{{ entity.years }}</td>	
+										<td>{{ entity.modelo }}</td>	
+										<td>{{ entity.status }}</td>	
+										<td>{{ entity.marca }}</td>	
+										<td style="text-align: center;">{% if permisos.maquinariaEditar==1%}
+										<input type ="checkbox" {% if entity.isActive ==1 %} checked="checked"{% endif %}class="isActive" idMaquinaria="{{ entity.id}}">
+									{% else %}
+										{% if entity.isActive ==1 %}
+											<span style="color:#5cb85c; " class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+										{% else %}
+											<span style="color: red;" class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+										{% endif %}	
+									{% endif %}	
+										 </td>
+										{% if permisos.maquinariaEditar==1%}
+											<td style="text-align: center;"><a href="/maquinaria/editar/{{ entity.id }}"><span style="color: #000;" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
+									{% endif %}
+									</tr>
+								{% endif %}
+							{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="busqueda" style="margin: 0">
+					<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+						<div class="panel panel-default">
+							<div class="panel-heading" role="tab" id="headingOne">
+								<h4 class="panel-title">
+								<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+								 Busqueda de Maquinaria Por:
+								<span class="indicator glyphicon glyphicon-menu-down pull-right"></span>
+								</a>
+				
+								</h4>
+							</div>
+							<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+								<div class="panel-body">
+									<div class="row" style="padding:10px;">
+										<div class="col-sm-4">ECO
+											<input id='ecoBusqueda' class='busqueda form-control' placeholder='Buscar por ECO'>
+										</div>
+										<div class="col-sm-4">Nombre
+											<input id='nombreBusqueda' class='busqueda form-control' style="display: none;">
+											<div id="nombre"></div>
+										</div>
+										<div class="col-sm-4">Numero de Serie
+											<input id='numeroSerieBusqueda' class='busqueda form-control' placeholder='Buscar por No Serie'>
+										</div>
+										<div class="col-sm-4">Modelo
+											<input id='modeloBusqueda' class='busqueda form-control' placeholder='Buscar por Modelo'>
+										</div>
+										<div class="col-sm-4">Marca
+											<input id='marcaBusqueda' class='busqueda form-control' placeholder='Buscar por Marca'>
+										</div>
+										<div class="col-sm-4">Status
+											<select class='busqueda form-control' id='statusBusqueda' placeholder='Buscar por Status'>
+												<option value="">Selecciona</option>
+												<option value="operando">Operando</option>
+												<option value="Reparacion">Reparacion</option>
+												<option value="Inactiva">Inactiva</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="table-responsive">			
+						<table  class="table table-hover table table-condensed table table-striped" style="text-transform: lowercase;">
+							<thead style="text-align:center; background:  #fcf8e3;  text-transform: capitalize;">
+								<th></th>
+								<th>ECO</th>
+								<th>No Serie</th>
+								<th>Nombre</th>
+								<th>A&ntilde;os</th>
+								<th>Modelo</th>
+								<th>Status</th>
+								<th>Marca</th>
+								<th>Activa</th>
+								<th></th>
+							</thead>
+							<tbody id="maquinariaResultados">
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
-
+<script id="maquinariaGuardados-tmpl" type="text/x-tmpl">
+{% verbatim %}
+{% for (var i=0; i<o.maquinaria.length; i++) { %}
+	<tr
+		{% if (o.maquinaria[i].isActive !=false && o.maquinaria[i].isActive !=null){ %}
+		style='background: #d9edf7'
+		{% }else{ %} 
+		style='background: #f2dede;'
+		{% } %}>
+		<td><a href='/maquinaria/eliminar/{%=o.maquinaria[i].id%}'><span style="color: red;" class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>
+		<td>{%=o.maquinaria[i].eco%}</td>
+		<td>{%=o.maquinaria[i].numeroSerie%}</td>
+		<td>{%=o.maquinaria[i].nombre%}</td>
+		<td>{%=o.maquinaria[i].years%}</td>
+		<td>{%=o.maquinaria[i].modelo%}</td>
+		<td>{%=o.maquinaria[i].status%}</td>
+		<td>{%=o.maquinaria[i].marca%}</td>
+		<td>
+		{% if (o.maquinaria[i].isActive !=false && o.maquinaria[i].isActive !=null){ %}
+		 <span style="color:#5cb85c; " class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+		{% }else{ %} 
+		<span style="color: red;" class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+		{% } %}
+		</td>
+		<td style="text-align: center;"><a  href='/maquinaria/editar/{%=o.maquinaria[i].id%}'><span style="color: #000;" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></td>
+	</tr>
+{% } %}
+{% endverbatim %}
+</script>
 {% endblock %}
 {% block javascripts %} 
 {{parent()}}
-<script src="{{ asset('public/js/formvalidation0.6.2/js/formValidation.js')}}"></script>
-<script src="{{ asset('public/js/formvalidation0.6.2/js/framework/bootstrap.js')}}"></script>
-<script src="{{ asset('public/js/formvalidation0.6.2/js/language/es_ES.js')}}"></script>
-<script src="{{ asset('public/js/formvalidation0.6.2/js/language/en_US.js')}}"></script>
+<script type="text/javascript" src="{{ asset('public/js/nicolasbize-magicsuggest-230b08b/magicsuggest.js')}}"></script>
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/tmpl.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('public/js/debounce/jquery.ba-throttle-debounce.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('public/js/jqueryui/1.11.4/jquery-ui.min.js')}}"></script>
 <script type="text/javascript">
 $(document).ready(function() {	
+	$('.busqueda').keypress ($.debounce( 250, buscarmaquinaria ) );
+	$('.busqueda').change( $.debounce( 250, buscarmaquinaria ) );
 
 	$( ".isActive" ).click(function() {
 		var isActive=0;
@@ -91,6 +250,88 @@ $(document).ready(function() {
 		
 		  //alert( $(this).attr('idPropiedades') );
 		});
+	
+	function buscarmaquinaria() {
+		$.ajax({//mandar cambios a bd
+			type: "POST",
+			url: "/maquinaria/buscarJson",
+				beforeSend: function( xhr ) {
+				var html= "<tr><td colspan='10' style='text-align:center;'><img src='/img/loading.gif' width='60px' ></td></tr>";
+				$('#maquinariaResultados').html(html);
+			},
+			//contentType:'application/json',
+			//data: JSON.stringify(jsonObj),
+			data: { 
+				eco: $('#ecoBusqueda').val(), 
+				nombre: $('#nombreBusqueda').val(), 
+				numeroSerie: $('#numeroSerieBusqueda').val(), 
+				modelo: $('#modeloBusqueda').val(), 
+				marca: $('#marcaBusqueda').val(), 
+				status: $('#statusBusqueda').val(),
+				},
+			dataType:'json'
+		}).done(function( json ) {
+			
+			document.getElementById("maquinariaResultados").innerHTML = tmpl("maquinariaGuardados-tmpl", json);
+		});
+		
+	};
+	if($('#nombreBusqueda').val()==''){
+			var split=null;
+		}else{
+			 var split = $('#nombreBusqueda').val().split(",");
+		}
+		var msetiquetas = $('#nombre').magicSuggest ({
+		name: 'texto', 
+		data: '/maquinaria/nombreBusqueda',
+		placeholder: 'Busca por nombre de la Maquinaria',
+		maxSelection: 1,		
+		expandOnFocus: false,
+		highlight: false,
+		value: (split)
+		});
+		$(msetiquetas).on('selectionchange', function(e,m){	
+		//  alert(JSON.stringify(this.getValue()));
+			  var valor = this.getValue();
+			 $('#nombreBusqueda').val(valor);
+			 buscarmaquinaria()
+	});
+	
+	function toggleChevron(e) {
+		$(e.target)
+			.prev('.panel-heading')
+			.find("span.indicator")
+			.toggleClass('glyphicon glyphicon-menu-down glyphicon glyphicon-menu-up');
+		}
+		$('#accordion').on('hidden.bs.collapse', toggleChevron);
+		$('#accordion').on('shown.bs.collapse', toggleChevron);
+		
+	$( "#sortableTable" ).sortable({//hacer q las td sean draggeables
+		connectWith: ".connectedSortable",
+		placeholder: "ui-state-highlight",
+		cancel: ".username",
+		deactivate: function(event, ui) { reorder();}
+		});
+		
+	$( "#sorteableTable" ).disableSelection();
+		function reorder(){ //reordenar las fotos
+			 var jsonObj = []; //generar array de json
+		 		$("#sortableTable").children().each(function (i) {// recorrer todas las fotos para tener orden correcto
+						var item = {};
+						item ["idMaquinaria"] = $(this).attr('idMaquinaria');
+						item ["orden"] = (i+1);
+						jsonObj.push(item);
+		 			$(".orden",this).html(i+1);// actualizar el numerito
+		 		});
+		 		$.ajax({//mandar cambios a bd
+		 				type: "POST",
+		 				url: "/maquinaria/reorder",
+		 				contentType:'application/json',
+		 				data: JSON.stringify(jsonObj),
+		 				dataType:'json'
+		 				//async: false
+		 			});
+		 	}
 
 });
 </script>
