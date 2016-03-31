@@ -4,39 +4,65 @@
 <div class="container">
 	<h2>{{ header }} <span style="font-size: 60%"> {{ nombre }} {{ apellidoP }} {{ apellidoM }}</span></h2>
 	<hr>
-	{{ form_start(form, {'attr': {'id': 'clientesForm'}}) }}
-	{{ form_row(form.nombre) }}
-	{{ form_row(form.apellidoP) }}
-	{{ form_row(form.apellidoM) }}
-	{{ form_row(form.calle) }}
-	{{ form_row(form.colonia) }}
-	{{ form_row(form.municipio) }}
-	{{ form_row(form.estado) }}
-	{{ form_row(form.cP) }}
-	{{ form_row(form.telefono) }}
-	{{ form_row(form.celular) }}
-	<div class="form-group">
-		<label class="col-sm-2 control-label required" for="system_crmbundle_usuarios_email">Email</label>
-		<div class="col-sm-10">
-			<div class="input-group">
-				<div class="input-group-addon">@</div>
-				{{ form_widget(form.email) }}
+	<ul id="myTab" class="nav nav-tabs" role="tablist">
+		<li role="presentation" class="active"><a href="#basico" aria-controls="basico" role="tab" data-toggle="tab">Basicos <i class="glyphicon"></i></a></li>
+		<li role="presentation"><a href="#direccion" aria-controls="direccion" role="tab" data-toggle="tab">Direccion <i class="glyphicon"></i></a></li>
+		<li role="presentation"><a href="#otros" aria-controls="otros" role="tab" data-toggle="tab">Otros <i class="glyphicon"></i></a></li>
+	</ul>
+		{{ form_start(form, {'attr': {'id': 'clientesForm'}}) }}
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="basico">
+			<div class="row" style="padding: 20px 0">
+			{{ form_row(form.nombre) }}
+			{{ form_row(form.apellidoP) }}
+			{{ form_row(form.apellidoM) }}
+			{{ form_row(form.telefono) }}
+			{{ form_row(form.celular) }}
+			<div class="form-group">
+				<label class="col-sm-2 control-label required" for="system_crmbundle_usuarios_email">Email</label>
+				<div class="col-sm-10">
+					<div class="input-group">
+						<div class="input-group-addon">@</div>
+						{{ form_widget(form.email) }}
+					</div>
+				</div>
+			</div>
+			{{ form_row(form.rFC) }}
+			{{ form_row(form.formaPago) }}
+			{{ form_row(form.notas) }}
+			</div>
+		</div>
+		<div role="tabpanel" class="tab-pane" id="direccion">
+			<div class="row" style="padding: 20px 0">
+			{{ form_row(form.cP) }}
+			{{ form_row(form.estado) }}
+			{{ form_row(form.municipio) }}
+			{{ form_row(form.colonia) }}
+			{{ form_row(form.calle) }}
+			</div>
+		</div>
+		<div role="tabpanel" class="tab-pane" id="otros">
+			<div class="row" style="padding: 20px 0">
+			{{ form_row(form.id) }}
+			{{ form_row(form.fechaCreacion) }}
+			{{ form_row(form.fechaModificacion) }}
 			</div>
 		</div>
 	</div>
-	{{ form_row(form.rFC) }}
-	{{ form_row(form.formaPago) }}
-	{{ form_row(form.notas) }}
-	{{ form_row(form.save) }}
-	{{ form_row(form._token) }}
-	{{ form_end(form, {'render_rest': true}) }}
+		{{ form_row(form.save) }}
+		{{ form_row(form._token) }}
+		{{ form_end(form, {'render_rest': true}) }}
+</div>
 {% endblock %}
 {% block javascripts %} 
 {{parent()}}
 <script src="{{ asset('public/js/jquery-2.2.0.js')}}"></script>
+<script src="{{ asset('public/js/jqueryui/1.11.4/jquery-ui.min.js')}}"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="{{ asset('public/js/bootstrapValidator.min.js')}}" type="text/javascript"></script>
 <script src="{{ asset('public/js/bootstrapValidator.js')}}" type="text/javascript"></script>
 <script src="{{ asset('public/js/formvalidation.js')}}"></script>
+<script src="{{ asset('public/js/formvalidation0.6.2/js/framework/bootstrap.js')}}"></script>
 <script src="{{ asset('public/js/formvalidation0.6.2.js')}}"></script>
 <script src="{{ asset('public/js/formvalidation0.6.2languagees_ES.js')}}"></script>
 <script src="{{ asset('public/js/formvalidation0.6.2jslanguageen_US.js')}}"></script>
@@ -65,7 +91,72 @@ $(document).ready(function() {
 				},
 			}
 		});
+	}).on('err.field.fv', function(e, data) {
+	})
+	 .on('err.form.fv', function(e) {
+		var $form= $(e.target),
+			fv = $form.data('formValidation'),
+			$invalidFields = fv.getInvalidFields();
+		for (var i = 0; i < $invalidFields.length; i++) {
+			var $field	= $invalidFields.eq(i);
+			//siempre hacer autofocus
+			if (true) {
+				// Activate the tab containing the field if exists
+				var $tabPane = $field.parents('.tab-pane'), tabId;
+				if ($tabPane && (tabId = $tabPane.attr('id'))) {
+					$('a[href="#' + tabId + '"][data-toggle="tab"]').tab('show');
+				}
+				break;
+			}
+		}
+	})
+	.on('status.field.fv', function(e, data) {
+		// data.element --> The field element
+		 var validator = data.fv;
+		var $tabPane = data.element.parents('.tab-pane'),
+			tabId	= $tabPane.attr('id');
+
+		if (tabId) {
+			var $icon = $('a[href="#' + tabId + '"][data-toggle="tab"]').parent().find('i');
+
+			// Add custom class to tab containing the field
+			if (data.status == validator.STATUS_INVALID) {
+				$icon.removeClass('glyphicon-ok').addClass('glyphicon-remove');
+			} else if (data.status == validator.STATUS_VALID) {
+				$icon.removeClass('glyphicon-ok glyphicon-remove');
+
+				var isValidTab = validator.isValidContainer($tabPane);
+				if (isValidTab !== null) {
+					$icon.addClass(isValidTab ? 'glyphicon-ok' : 'glyphicon-remove');
+				}
+			}
+		}
 	});
+validateonstart();
+function validateonstart(){
+	$invalidFields = $('.has-error');
+	//poner taches a las tabs
+	for (var i = 0; i < $invalidFields.length; i++) {
+		var $field	= $invalidFields.eq(i);
+			// Activate the tab containing the field if exists
+		var $tabPane = $field.parents('.tab-pane'), tabId;
+		tabId	= $tabPane.attr('id');
+			if (tabId) {
+				var $icon = $('a[href="#' + tabId + '"][data-toggle="tab"]').parent().find('i');
+
+				// Add custom class to tab containing the field
+					$icon.removeClass('glyphicon-ok').addClass('glyphicon-remove');
+			}
+	}
+	//ir a la tab
+		var $field	= $invalidFields.eq(0);
+			// Activate the tab containing the field if exists
+			var $tabPane = $field.parents('.tab-pane'), tabId;
+			if ($tabPane && (tabId = $tabPane.attr('id'))) {
+				$('a[href="#' + tabId + '"][data-toggle="tab"]').tab('show');
+			}
+}
+
 </script>
 
 {% endblock %}

@@ -15,6 +15,7 @@ class ClientesType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
+			->add('id','integer', array('read_only'=>true, 'required' => false, 'label' => utf8_encode('Folio')))
 			->add('nombre', 'text',array('required'=>true, 'label'=>'Nombre'))
 			->add('apellidoP','text', array('required'=>false, 'label'=>'Apellido Paterno'))
 			->add('apellidoM','text', array('required'=>false, 'label'=>'Apellido Materno'))
@@ -28,7 +29,9 @@ class ClientesType extends AbstractType
 			->add('rFC', 'text', array('required'=>false, 'label'=>'RFC'))
 			->add('cP', 'text', array('required'=>false, 'label'=>'CP'))
 			->add('formaPago', 'text', array('required'=>false, 'label'=>'Forma de Pago'))
-			->add('notas', 'textarea', array('attr' => array('cols' => '5', 'rows' => '5')))
+			->add('notas', 'textarea', array('required'=>false,'attr' => array('cols' => '5', 'rows' => '5')))
+			->add('fechaModificacion', 'datetime', array('read_only'=>true, 'required' => false,'widget' => 'single_text','format' => 'yyyy-MM-dd  HH:mm','label'=>'Fecha de Modificacion'))
+			->add('fechaCreacion', 'datetime', array('read_only'=>true, 'required' => false,'widget' => 'single_text','format' => 'yyyy-MM-dd  HH:mm','label'=>'Fecha de Alta'))
 			//   ->add('status','choice', array(array('choices' => array('1' => 'Activo', '0' => 'Inactivo'),
 				//'required'=>true)))
 			->add('save', 'submit', array('label' => 'Guardar' , 'attr'=>array('class'=>'btn btn-primary col-sm-4 col-sm-offset-3')))

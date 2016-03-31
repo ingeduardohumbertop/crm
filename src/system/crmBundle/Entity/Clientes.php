@@ -80,6 +80,10 @@ class Clientes
 	 * @ORM\Column(type="text")
 	 */
 	protected $notas;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	protected $fechaModificacion;
 
  
 
@@ -459,5 +463,28 @@ class Clientes
     public function getNotas()
     {
         return $this->notas;
+    }
+
+    /**
+     * Set fechaModificacion
+     *
+     * @param \DateTime $fechaModificacion
+     * @return Clientes
+     */
+    public function setFechaModificacion($fechaModificacion)
+    {
+        $this->fechaModificacion = $fechaModificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaModificacion
+     *
+     * @return \DateTime 
+     */
+    public function getFechaModificacion()
+    {
+        return $this->fechaModificacion;
     }
 }

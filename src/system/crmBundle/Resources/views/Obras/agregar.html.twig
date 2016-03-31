@@ -4,40 +4,83 @@
 <div class="container">
 	<h2>{{ header }} <span style="font-size: 60%"> {{ nombre }}</span></h2>
 	<hr>
+	<ul id="myTab" class="nav nav-tabs" role="tablist">
+		<li role="presentation" class="active"><a href="#basico" aria-controls="basico" role="tab" data-toggle="tab">Basicos <i class="glyphicon"></i></a></li>
+		<li role="presentation"><a href="#direccion" aria-controls="direccion" role="tab" data-toggle="tab">Direccion <i class="glyphicon"></i></a></li>
+		<li role="presentation"><a href="#fechas" aria-controls="otros" role="tab" data-toggle="tab">Fechas <i class="glyphicon"></i></a></li>
+	</ul>
 	{{ form_start(form, {'attr': {'id': 'obrasForm'}}) }}
-	{{ form_row(form.nombre) }}
-	{{ form_row(form.fechaInicioReal) }}
-	{{ form_row(form.fechafinalReal) }}
-	{{ form_row(form.fechaInicioPlan) }}
-	{{ form_row(form.fechaFinalPlan) }}
-	<div class="form-group">
-		<label class="col-sm-2 control-label required" for="system_crmbundle_usuarios_email">Coste Real</label>
-		<div class="col-sm-10">
-			<div class="input-group">
-				<div class="input-group-addon">$</div>
-				{{ form_widget(form.costeReal) }}
-			</div>
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="basico">
+			<div class="row" style="padding: 20px 0">
+			{{ form_row(form.nombre) }}
+			{{ form_row(form.idCliente) }}
+			{{ form_row(form.estadoObra) }}
+			{{ form_row(form.notas) }}
 		</div>
 	</div>
-	<div class="form-group">
-		<label class="col-sm-2 control-label required" for="system_crmbundle_usuarios_email">Coste Planificado</label>
-		<div class="col-sm-10">
-			<div class="input-group">
-				<div class="input-group-addon">$</div>
-				{{ form_widget(form.costePlanificado) }}
-			</div>
+	<div role="tabpanel" class="tab-pane" id="direccion">
+		<div class="row" style="padding: 20px 0">
+		{{ form_row(form.estado) }}
+		{{ form_row(form.municipio) }}
+		{{ form_row(form.colonia) }}
+		{{ form_row(form.calle) }}
 		</div>
 	</div>
-	{{ form_row(form.estado) }}
-	{{ form_row(form.municipio) }}
-	{{ form_row(form.colonia) }}
-	{{ form_row(form.calle) }}
-	{{ form_row(form.estadoObra) }}
-	{{ form_row(form.notas) }}
-	{{ form_row(form.save) }}
-	{{ form_row(form._token) }}
-	{{ form_end(form, {'render_rest': true}) }}
+	<div role="tabpanel" class="tab-pane" id="fechas">
+		<div class="row" style="border-radius:20px; padding: 10px">
+			<div class="col-sm-7 col-sm-offset-2">
+				{{ form_row(form.fechaCreacion) }}
+				{{ form_row(form.fechaModificacion) }}
+			</div>
+			<div style="clear: both;"></div>
+			<h4 style="text-align: center;">Fecha Real</h4>
+			<div class="col-sm-6">
+				{{ form_row(form.fechaInicioReal) }}
+			</div>
+			<div class="form-group">
+				<div class="col-sm-6">
+					{{ form_row(form.fechafinalReal) }}
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label required" for="system_crmbundle_usuarios_email">Coste Real</label>
+				<div class="col-sm-4">
+					<div class="input-group">
+						<div class="input-group-addon">$</div>
+						{{ form_widget(form.costeReal) }}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" style=" border-radius:20px; padding: 10px">
+			<h4 style="text-align: center;">Fecha Planificada</h4>
+			<div class="col-sm-6">
+				{{ form_row(form.fechaInicioPlan) }}
+			</div>
+			<div class="form-group">
+				<div class="col-sm-6">
+					{{ form_row(form.fechaFinalPlan) }}
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label required" for="system_crmbundle_usuarios_email">Coste Planificado</label>
+				<div class="col-sm-4">
+					<div class="input-group">
+						<div class="input-group-addon">$</div>
+						{{ form_widget(form.costePlanificado) }}
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		</div>
+	</div>
+{{ form_row(form.save) }}
+{{ form_row(form._token) }}
+{{ form_end(form, {'render_rest': true}) }}
 </div>
+
 {% endblock %}
 {% block javascripts %} 
 {{parent()}}
@@ -66,7 +109,6 @@ $(document).ready(function() {
 						validators: {
 							numeric: {
 								message: 'Solo numeros',
-								thousandsSeparator: '',
 								decimalSeparator: '.'
 							}
 						}
@@ -75,13 +117,118 @@ $(document).ready(function() {
 						validators: {
 							numeric: {
 								message: 'Solo numeros',
-								thousandsSeparator: '',
 								decimalSeparator: '.'
 							}
 						}
 					},
+					'obras[fechaInicioPlan]': {
+						validators: {
+							 notEmpty: {
+								},
+								date: {
+								format: 'MM/DD/YYYY',
+								max: 'obras[fechaFinalPlan]',
+								//message: 'The start date is not a valid'
+								}
+							}
+						},
+					'obras[fechaFinalPlan]': {
+						 validators: {
+							notEmpty: {
+								},
+								date: {
+								format: 'MM/DD/YYYY',
+								min: 'obras[fechaInicioPlan]',
+							//	message: 'The end date is not a valid'
+								}
+							}
+						},
+						'obras[fechaInicioReal]': {
+							validators: {
+									date: {
+									format: 'MM/DD/YYYY',
+									max: 'obras[fechafinalReal]',
+									//message: 'The start date is not a valid'
+									}
+								}
+							},
+						'obras[fechafinalReal]': {
+							 validators: {
+									date: {
+									format: 'MM/DD/YYYY',
+									min: 'obras[fechaInicioReal]',
+								//	message: 'The end date is not a valid'
+									}
+								}
+							},
+					}
+				
+		}).on('err.field.fv', function(e, data) {
+		})
+		 .on('err.form.fv', function(e) {
+			var $form= $(e.target),
+				fv = $form.data('formValidation'),
+				$invalidFields = fv.getInvalidFields();
+			for (var i = 0; i < $invalidFields.length; i++) {
+				var $field	= $invalidFields.eq(i);
+				//siempre hacer autofocus
+				if (true) {
+					// Activate the tab containing the field if exists
+					var $tabPane = $field.parents('.tab-pane'), tabId;
+					if ($tabPane && (tabId = $tabPane.attr('id'))) {
+						$('a[href="#' + tabId + '"][data-toggle="tab"]').tab('show');
+					}
+					break;
 				}
+			}
+		})
+		.on('status.field.fv', function(e, data) {
+			// data.element --> The field element
+			 var validator = data.fv;
+			var $tabPane = data.element.parents('.tab-pane'),
+				tabId	= $tabPane.attr('id');
+
+			if (tabId) {
+				var $icon = $('a[href="#' + tabId + '"][data-toggle="tab"]').parent().find('i');
+
+				// Add custom class to tab containing the field
+				if (data.status == validator.STATUS_INVALID) {
+					$icon.removeClass('glyphicon-ok').addClass('glyphicon-remove');
+				} else if (data.status == validator.STATUS_VALID) {
+					$icon.removeClass('glyphicon-ok glyphicon-remove');
+
+					var isValidTab = validator.isValidContainer($tabPane);
+					if (isValidTab !== null) {
+						$icon.addClass(isValidTab ? 'glyphicon-ok' : 'glyphicon-remove');
+					}
+				}
+			}
 		});
+	validateonstart();
+	function validateonstart(){
+		$invalidFields = $('.has-error');
+		//poner taches a las tabs
+		for (var i = 0; i < $invalidFields.length; i++) {
+			var $field	= $invalidFields.eq(i);
+				// Activate the tab containing the field if exists
+			var $tabPane = $field.parents('.tab-pane'), tabId;
+			tabId	= $tabPane.attr('id');
+				if (tabId) {
+					var $icon = $('a[href="#' + tabId + '"][data-toggle="tab"]').parent().find('i');
+
+					// Add custom class to tab containing the field
+						$icon.removeClass('glyphicon-ok').addClass('glyphicon-remove');
+				}
+		}
+		//ir a la tab
+			var $field	= $invalidFields.eq(0);
+				// Activate the tab containing the field if exists
+				var $tabPane = $field.parents('.tab-pane'), tabId;
+				if ($tabPane && (tabId = $tabPane.attr('id'))) {
+					$('a[href="#' + tabId + '"][data-toggle="tab"]').tab('show');
+				}
+	}
+			
 	});
 </script>
 

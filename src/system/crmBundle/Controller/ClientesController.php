@@ -79,11 +79,11 @@ class ClientesController extends Controller
 
     		$form=$this->createForm(new ClientesType(), $clientesExistente);
     		$form->handleRequest($request);
-    		
+    		date_default_timezone_set('America/Mexico_City');
     		$now = new \DateTime();
     		if($form->isValid()){
-    			
-    			
+    			$clientesExistente
+    			->setFechaModificacion($now);
     			$em->flush();
     			$this->get('session')->getFlashBag()->add('mensaje','Se ha actualizado los datos correctamente');
     			return $this->redirect($this->generateUrl('ClientesIndex', array()));

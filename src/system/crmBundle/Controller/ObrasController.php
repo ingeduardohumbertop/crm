@@ -46,7 +46,7 @@ class ObrasController extends Controller
 					$this->get('session')->getFlashBag()->add('error','No tienes permisos para agregar');
 					return $this->redirectToRoute('ObrasIndex');
 				}
-				$header = 'Agregar Obra';
+				$header = 'Agregar Obra Nueva';
 				$nombre = '';
 				$ObraNew = new Obras();
 				$form= $this->createForm(new ObrasType(), $ObraNew);
