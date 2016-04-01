@@ -27,7 +27,13 @@ class ObrasType extends AbstractType
 			->add('municipio', 'text', array('required'=>true, 'label'=>utf8_decode('Municipio')))
 			->add('colonia', 'text', array('required'=>true, 'label'=>'Colonia'))
 			->add('calle', 'text', array('required'=>false, 'label'=>'Calle'))
-			->add('estadoObra', 'text', array('required'=>true, 'label'=>'Estado de Obra'))
+			->add('estadoObra', 'choice', array( 'choices'  => array('' => utf8_decode('Seleccionar'),
+					'pendiente-presupuestar' => utf8_decode('Pendiente Presupuestar'),
+					'pendiente-responder-cliente' => utf8_decode('Pendiente Responde Cliente'),
+					'fase-estructura' => utf8_decode('Fase Estructura'),
+					'comenzada' => utf8_decode('Comenzada'),
+					'terminada-cerrada' => utf8_decode('Terminada, Cerrada'),
+					), 'required' => true))
 			->add('fechaCreacion', 'datetime', array('read_only'=>true, 'required' => false,'widget' => 'single_text','format' => 'yyyy-MM-dd  HH:mm','label'=>'Alta'))
 			->add('fechaModificacion', 'datetime', array('read_only'=>true, 'required' => false,'widget' => 'single_text','format' => 'yyyy-MM-dd  HH:mm','label'=>'Modificacion'))
 			->add('notas', 'textarea', array('required'=>false,'attr' => array('cols' => '5', 'rows' => '5')))

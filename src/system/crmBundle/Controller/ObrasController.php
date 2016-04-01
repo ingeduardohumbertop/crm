@@ -47,6 +47,7 @@ class ObrasController extends Controller
 					return $this->redirectToRoute('ObrasIndex');
 				}
 				$header = 'Agregar Obra Nueva';
+				$display='display:none';
 				$nombre = '';
 				$ObraNew = new Obras();
 				$form= $this->createForm(new ObrasType(), $ObraNew);
@@ -64,6 +65,7 @@ class ObrasController extends Controller
 				}
 			}else{
 				$header='Editar Obra';
+				$display='';
 				$nombre=$obrasExistentes->getNombre();
 				if(!$permisos->getObrasEditar()){
 					$this->get('session')->getFlashBag()->add('error','No existe este provedor con este id');
@@ -88,8 +90,13 @@ class ObrasController extends Controller
 							'form' => $form->createView(),
 							'permisos'=>$permisos,
 							'nombre'=>$nombre,
+							'idUsuario'=>$user->getId(),
+							'idObra'=>$idObra,
+							'display'=>$display
+							
 							 
 					));
 		}
+		
     
 }

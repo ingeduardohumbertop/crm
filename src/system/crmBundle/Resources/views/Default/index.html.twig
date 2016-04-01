@@ -3,7 +3,42 @@
 {% block body %}
 <div class="container">
 	<h2>Home</h2>
-	 <div id="donutchart" style="width: 500px; height: 400px;"></div>
+	<div class="col-sm-6">
+		<div id="donutchart" style="width: 500px; height: 400px;"></div>
+	</div>
+	<div class="col-sm-6">
+	
+	
+	</div>
+	<div style="clear: both;"></div>
+	<h4>Registradas Recientemente</h4>
+	 <div class="col-sm-6">
+		 <table class="table table-hover table table-condensed table table-striped">
+		 	<thead>
+		 		<tr>
+		 			<th>Id</th>
+		 			<th>Nombre</th>
+		 			<th>Fase</th>
+		 			<th>Direccion</th>
+		 		</tr>
+		 	</thead>
+		 	<tbody>
+			 {% for entity in entities %}
+				<tr>
+					<td>{{ entity.id }}</td>
+					<td>{% if permisos.obrasEditar %}
+						<a href="/obras/editar/{{ entity.id  }}">
+						{% endif %}
+						{{ entity.nombre }}
+						{% if permisos.obrasEditar %}</a>{% endif %}
+					</td>
+					<td>{{ entity.estadoObra }}</td>
+					<td>{{ entity.direccion }}</td>
+				</tr>
+			 {% endfor %}
+			</tbody>
+		 </table>
+	 </div>
 </div>
 {% endblock %}
 {% block javascripts %} 
@@ -11,29 +46,44 @@
 <script src="{{ asset('public/js/jquery-2.2.0.js')}}"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-$(document).ready(function() {	
-      google.charts.load("current", {packages:["corechart"]});
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['statusObras', 'Hours per Day'],
-          ['Work',     11],
-          ['Eat',      2],
-          ['Commute',  2],
-          ['Watch TV', 2],
-          ['Sleep',    7]
-        ]);
-
-        var options = {
-          title: 'Obras',
-          is3D: true,
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-        chart.draw(data, options);
-      }  
+$(document).ready(function() {
+	graficar ();
+	function graficar (){
+		$.ajax({
+			type:"POST",
+			url: "/obras/estadisticas/jsonReporte",
+			beforeSend: function( xhr ){
+				$('.loading').show('slow');
+			},
+			dataType: 'json'
+		}).done(function( json ) {	
+			//document.getElementById("resultados").innerHTML = tmpl("Resultados-tmpl", json);	
+			//document.getElementById("resultadosMes").innerHTML = tmpl("ResultadosMes-tmpl", json.resultadosMes);	
+			$('.loading').hide('slow');
+			
+			datos = [['Task', 'Hours per Day']];
+			for (var i = 0; i < json.resultados.length ; i++) {
+				datos.push([json.resultados[i]['estadoObra'], parseFloat(json.resultados[i]['cantidad'])]);
+			}
+			drawChart();
+			
+		
+		});
+	}
+var datos = [['Task', 'Hours per Day']];
+	
+	google.charts.load("current", {packages:["corechart"]});
+	google.charts.setOnLoadCallback(drawChart);
+   	function drawChart() {
+ 		var data2 = google.visualization.arrayToDataTable(datos);
+ 		var options2 = {
+ 			title: 'Obras Registradas Estatus',
+ 			is3D: true,
+ 		};
+ 		var chart2 = new google.visualization.PieChart(document.getElementById('donutchart'));
+ 		chart2.draw(data2, options2);
+ 	}
 					
 });
 </script>
-
 {% endblock %}

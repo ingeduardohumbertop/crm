@@ -1,87 +1,4 @@
 {% extends 'crmBundle::base.html.twig' %}
-
-{% block body %}
-<div class="container">
-	<h2>{{ header }} <span style="font-size: 60%"> {{ nombre }}</span></h2>
-	<hr>
-	<ul id="myTab" class="nav nav-tabs" role="tablist">
-		<li role="presentation" class="active"><a href="#basico" aria-controls="basico" role="tab" data-toggle="tab">Basicos <i class="glyphicon"></i></a></li>
-		<li role="presentation"><a href="#direccion" aria-controls="direccion" role="tab" data-toggle="tab">Direccion <i class="glyphicon"></i></a></li>
-		<li role="presentation"><a href="#fechas" aria-controls="otros" role="tab" data-toggle="tab">Fechas <i class="glyphicon"></i></a></li>
-	</ul>
-	{{ form_start(form, {'attr': {'id': 'obrasForm'}}) }}
-	<div class="tab-content">
-		<div role="tabpanel" class="tab-pane active" id="basico">
-			<div class="row" style="padding: 20px 0">
-			{{ form_row(form.nombre) }}
-			{{ form_row(form.idCliente) }}
-			{{ form_row(form.estadoObra) }}
-			{{ form_row(form.notas) }}
-		</div>
-	</div>
-	<div role="tabpanel" class="tab-pane" id="direccion">
-		<div class="row" style="padding: 20px 0">
-		{{ form_row(form.estado) }}
-		{{ form_row(form.municipio) }}
-		{{ form_row(form.colonia) }}
-		{{ form_row(form.calle) }}
-		</div>
-	</div>
-	<div role="tabpanel" class="tab-pane" id="fechas">
-		<div class="row" style="border-radius:20px; padding: 10px">
-			<div class="col-sm-7 col-sm-offset-2">
-				{{ form_row(form.fechaCreacion) }}
-				{{ form_row(form.fechaModificacion) }}
-			</div>
-			<div style="clear: both;"></div>
-			<h4 style="text-align: center;">Fecha Real</h4>
-			<div class="col-sm-6">
-				{{ form_row(form.fechaInicioReal) }}
-			</div>
-			<div class="form-group">
-				<div class="col-sm-6">
-					{{ form_row(form.fechafinalReal) }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-2 control-label required" for="system_crmbundle_usuarios_email">Coste Real</label>
-				<div class="col-sm-4">
-					<div class="input-group">
-						<div class="input-group-addon">$</div>
-						{{ form_widget(form.costeReal) }}
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row" style=" border-radius:20px; padding: 10px">
-			<h4 style="text-align: center;">Fecha Planificada</h4>
-			<div class="col-sm-6">
-				{{ form_row(form.fechaInicioPlan) }}
-			</div>
-			<div class="form-group">
-				<div class="col-sm-6">
-					{{ form_row(form.fechaFinalPlan) }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-2 control-label required" for="system_crmbundle_usuarios_email">Coste Planificado</label>
-				<div class="col-sm-4">
-					<div class="input-group">
-						<div class="input-group-addon">$</div>
-						{{ form_widget(form.costePlanificado) }}
-					</div>
-				</div>
-			</div>
-			
-		</div>
-		</div>
-	</div>
-{{ form_row(form.save) }}
-{{ form_row(form._token) }}
-{{ form_end(form, {'render_rest': true}) }}
-</div>
-
-{% endblock %}
 {% block javascripts %} 
 {{parent()}}
 <script src="{{ asset('public/js/jquery-2.2.0.js')}}"></script>
@@ -91,9 +8,100 @@
 <script src="{{ asset('public/js/formvalidation0.6.2.js')}}"></script>
 <script src="{{ asset('public/js/formvalidation0.6.2languagees_ES.js')}}"></script>
 <script src="{{ asset('public/js/formvalidation0.6.2jslanguageen_US.js')}}"></script>
+
+<script type="text/javascript" src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/vendor/jquery.ui.widget.js')}}"></script>
+<script type="text/javascript" src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.iframe-transport.js')}}"></script>
+<script type="text/javascript" src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload.js')}}"></script>
+
+<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/load-image.all.min.js')}}"></script>
+<!-- The Canvas to Blob plugin is included for image resizing functionality -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/canvas-to-blob.min.js')}}"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.iframe-transport.js')}}"></script>
+<!-- The basic File Upload plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload.js')}}"></script>
+<!-- The File Upload processing plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-process.js')}}"></script>
+<!-- The File Upload image preview & resize plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-image.js')}}"></script>
+<!-- The File Upload audio preview plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-audio.js')}}"></script>
+<!-- The File Upload video preview plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-video.js')}}"></script>
+<!-- The File Upload validation plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-validate.js')}}"></script>
+
+<!-- The Templates plugin is included to render the upload/download listings -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/tmpl.min.js')}}"></script>
+<!-- blueimp Gallery script -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.blueimp-gallery.min.js')}}"></script>
+<!-- The File Upload user interface plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-ui.js')}}"></script>
+<!-- The main application script -->
+<!-- script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/main.js')}}"></script	-->
+<script type="text/javascript" src="{{ asset('public/js/jqueryui/1.11.4/jquery-ui.min.js')}}"></script>
 <script type="text/javascript">
 $(document).ready(function() {	
 
+	$(function () {
+		'use strict';
+		$('#fileupload').fileupload({
+			
+			formData: {tipo:'adjuntoObra',idUsuario: '{{idUsuario}}', idObra:'{{idObra}}'},
+			url: '{{ oneup_uploader_endpoint('gallery') }}',
+			autoUpload: true,
+			acceptFileTypes: /(\.|\/)(doc?|xls?|gif|jpe?g|png|ppt?|pdf|txt|csv)$/i,
+			maxFileSize: 999000,
+			disableImageResize: /Android(?!.*Chrome)|Opera/
+				.test(window.navigator.userAgent),
+			imageMaxWidth: 1024,
+			imageMaxHeight: 768,
+			previewMaxWidth: 100,
+			previewMaxHeight: 100,
+			imageOrientation:true,
+			previewCrop: true
+		}).on('fileuploaddestroyed', function (e, data) {
+		});
+		
+		
+		$('#fileupload').addClass('fileupload-processing');
+		$.ajax({
+			url: '/obras/adjunto/{{idObra}}',
+			dataType: 'json',
+			context: $('#fileupload')[0]
+		}).always(function () {
+			$(this).removeClass('fileupload-processing');
+		}).done(function (result) {
+			$(this).fileupload('option', 'done')
+				.call(this, $.Event('done'), {result: result});
+		});
+	});			
+	
+	$( ".files" ).sortable({//hacer q las fotos sean draggeables
+		placeholder: "ui-state-highlight",
+		deactivate: function(event, ui) { reorder();}
+		});
+		$( ".files" ).disableSelection();
+	 function reorder(){ //reordenar las fotos
+	 		var jsonObj = []; //generar array de json
+	 		$(".files").children().each(function (i) {// recorrer todas las fotos para tener orden correcto
+					var item = {};
+					item ["idArchivo"] = $(this).attr('idArchivo');
+					item ["orden"] = (i+1);
+					jsonObj.push(item);
+	 			$(".orden",this).html(i+1);// actualizar el numerito
+	 		});
+	 		$.ajax({//mandar cambios a bd
+	 				type: "POST",
+	 				url: "/obras/adjuntos/reorder",
+	 				contentType:'application/json',
+	 				data: JSON.stringify(jsonObj),
+	 				dataType:'json'
+	 				
+	 			}).done(function( json ) {
+			});
+	 	}
 		$('#obrasForm')
 		.formValidation({
 			framework: 'bootstrap',
@@ -227,9 +235,229 @@ $(document).ready(function() {
 				if ($tabPane && (tabId = $tabPane.attr('id'))) {
 					$('a[href="#' + tabId + '"][data-toggle="tab"]').tab('show');
 				}
-	}
+		}
 			
 	});
+</script>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('public/js/jQuery-File-Upload-9.10.1/css/jquery.fileupload-ui.css')}}">
+<link rel="stylesheet" href="{{ asset('public/js/jQuery-File-Upload-9.10.1/css/jquery.fileupload.css')}}">
+{% endblock %}
+{% block body %}
+<div class="container">
+	<h2>{{ header }} <span style="font-size: 60%"> {{ nombre }}</span></h2>
+	<hr>
+	<ul class="nav nav-tabs" role="tablist">
+		<li role="presentation" class="active"><a href="#informacion" aria-controls="informacion" role="tab" data-toggle="tab">Informacion</a></li>
+		<li style="{{ display }}" role="presentation"><a href="#datosAdjuntos" aria-controls="datosAdjuntos" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Adjuntos</a></li>
+	</ul>
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="informacion">
+			<ul id="myTab" class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#basico" aria-controls="basico" role="tab" data-toggle="tab">Basicos <i class="glyphicon"></i></a></li>
+				<li role="presentation"><a href="#direccion" aria-controls="direccion" role="tab" data-toggle="tab">Direccion <i class="glyphicon"></i></a></li>
+				<li role="presentation"><a href="#fechas" aria-controls="otros" role="tab" data-toggle="tab">Fechas <i class="glyphicon"></i></a></li>
+			</ul>
+			{{ form_start(form, {'attr': {'id': 'obrasForm'}}) }}
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="basico">
+					<div class="row" style="padding: 20px 0">
+					{{ form_row(form.nombre) }}
+					{{ form_row(form.idCliente) }}
+					{{ form_row(form.estadoObra) }}
+					{{ form_row(form.notas) }}
+					</div>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="direccion">
+					<div class="row" style="padding: 20px 0">
+					{{ form_row(form.estado) }}
+					{{ form_row(form.municipio) }}
+					{{ form_row(form.colonia) }}
+					{{ form_row(form.calle) }}
+					</div>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="fechas">
+					<div class="row" style="border-radius:20px; padding: 10px">
+						<div class="col-sm-7 col-sm-offset-2">
+							{{ form_row(form.fechaCreacion) }}
+							{{ form_row(form.fechaModificacion) }}
+						</div>
+						<div style="clear: both;"></div>
+						<h4 style="text-align: center;">Fecha Real</h4>
+						<div class="col-sm-6">
+							{{ form_row(form.fechaInicioReal) }}
+						</div>
+						<div class="form-group">
+							<div class="col-sm-6">
+								{{ form_row(form.fechafinalReal) }}
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label required" for="system_crmbundle_usuarios_email">Coste Real</label>
+							<div class="col-sm-4">
+								<div class="input-group">
+									<div class="input-group-addon">$</div>
+									{{ form_widget(form.costeReal) }}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row" style=" border-radius:20px; padding: 10px">
+						<h4 style="text-align: center;">Fecha Planificada</h4>
+						<div class="col-sm-6">
+							{{ form_row(form.fechaInicioPlan) }}
+						</div>
+						<div class="form-group">
+							<div class="col-sm-6">
+								{{ form_row(form.fechaFinalPlan) }}
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label required" for="system_crmbundle_usuarios_email">Coste Planificado</label>
+							<div class="col-sm-4">
+								<div class="input-group">
+									<div class="input-group-addon">$</div>
+									{{ form_widget(form.costePlanificado) }}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{{ form_row(form.save) }}
+				{{ form_row(form._token) }}
+				{{ form_end(form, {'render_rest': false}) }}
+			</div>
+		</div>
+		<div role="tabpanel" class="tab-pane" id="datosAdjuntos">
+			<form id="fileupload" action="{{ oneup_uploader_endpoint('gallery') }}" method="POST" enctype="multipart/form-data">
+				<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+				<div class="row fileupload-buttonbar">
+					<div class="col-lg-7">
+						<!-- The fileinput-button span is used to style the file input field as button -->
+						<span class="btn btn-success fileinput-button">
+							<i class="glyphicon glyphicon-plus"></i>
+							<span>Agregar archivos...</span>
+							<input type="file" name="blueimp" multiple>
+						</span>
+						<button type="reset" class="btn btn-warning cancel">
+							<i class="glyphicon glyphicon-ban-circle"></i>
+							<span>Cancelar carga</span>
+						</button>
+						<button type="button" class="btn btn-danger delete">
+							<i class="glyphicon glyphicon-trash"></i>
+							<span>Eliminar</span>
+						</button>
+						<input type="checkbox" class="toggle">
+						<!-- The global file processing state -->
+						<span class="fileupload-process"></span>
+					</div>
+					<!-- The global progress state -->
+					<div class="col-lg-5 fileupload-progress fade">
+						<!-- The global progress bar -->
+						<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+							<div class="progress-bar progress-bar-success" style="width:0%;"></div>
+						</div>
+						<!-- The extended global progress state -->
+						<div class="progress-extended">&nbsp;</div>
+					</div>
+				</div>
+				<!-- The table listing the files available for upload/download -->
+				<table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+{% verbatim %}
+	{% for (var i=0, file; file=o.files[i]; i++) { %}
+	<tr class="template-upload fade" idArchivo="0" >
+		<td>
+			<span class="orden"></span>
+		</td>
+		<td>
+			<span class="preview"></span>
+		</td>
+		<td>
+			<p class="name">{%=file.name%}</p>
+			<strong class="error text-danger"></strong>
+		</td>
+		<td>
+			<p class="size">Procesando...</p>
+			<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+		</td>
+		<td>
+			{% if (!i && !o.options.autoUpload) { %}
+				<button class="btn btn-primary start" disabled>
+					<i class="glyphicon glyphicon-upload"></i>
+					<span>Empezar</span>
+				</button>
+			{% } %}
+			{% if (!i) { %}
+				<button class="btn btn-warning cancel">
+					<i class="glyphicon glyphicon-ban-circle"></i>
+					<span>Cancelar</span>
+				</button>
+			{% } %}
+		</td>
+	</tr>
+{% } %}
+{% endverbatim %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+{% verbatim %}
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+	<tr class="template-download fade" idArchivo="{%=file.idArchivo%}" >
+		<td>
+			<span class="orden">{%=file.orden%}</span>
+		</td>
+		<td>		
+		{% if (file.key == 'gif' || file.key == 'jpg'|| file.key == 'jpeg'|| file.key == 'png') { %}
+			<span class="preview">
+				{% if (file.thumbnailUrl) { %}
+					<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}"><img style='max-width:100px;max-height:100px;' src="{%=file.thumbnailUrl%}"></a>
+				{% } %}
+			</span>
+		{% } else { %}
+			{%=file.key%} <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+		{% } %}
+		</td>
+		<td>
+			<p class="name">
+				{% if (file.url) { %}
+					<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" >{%=file.name%}</a>
+				{% } else { %}
+					<span>{%=file.name%}</span>
+				{% } %}
+			</p>
+			{% if (file.error) { %}
+				<div><span class="label label-danger">Error</span> {%=file.error%}</div>
+			{% } %}
+		</td>
+		<td>
+			<span class="size">{%=o.formatFileSize(file.size)%}</span>
+		</td>
+		<td>
+			{% if (file.deleteUrl) { %}
+				<button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+					<i class="glyphicon glyphicon-trash"></i>
+					<span>Eliminar</span>
+				</button>
+				<input type="checkbox" name="delete" value="1" class="toggle">
+			{% } else { %}
+				<button class="btn btn-warning cancel">
+					<i class="glyphicon glyphicon-ban-circle"></i>
+					<span>Cancel</span>
+				</button>
+			{% } %}
+		</td>
+	</tr>
+{% } %}
+{% endverbatim %}
 </script>
 
 {% endblock %}

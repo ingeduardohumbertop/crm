@@ -32,6 +32,11 @@ UsuariosFoto:
     defaults: { _controller: crmBundle:Usuarios:listFoto}
     requirements:
         idUsuario:  \d+
+UusuariosEliminarFoto:
+    path:     /usuarios/eliminarFoto/{id}
+    defaults: { _controller: crmBundle:Adjuntos:eliminarFoto}
+    requirements:
+        id:  \d+
 ProvedoresIndex:
     path:     /provedores
     defaults: { _controller: crmBundle:Provedores:index}
@@ -111,3 +116,19 @@ ObrasEditar:
     defaults: { _controller: crmBundle:Obras:handler}
     requirements:
         idObra:  \d+
+ObrasEstadisticasr:
+    path:     /obras/estadisticas/jsonReporte
+    defaults: { _controller: crmBundle:Default:numeroObras}
+ObrasAdjuntos:
+    path:     /obras/adjunto/{idObra}
+    defaults: { _controller: crmBundle:Adjuntos:adjuntoslistener}
+    requirements:
+        idObra:  \d+
+ObrasAdjuntosEliminar:
+    path:     /obras/adjuntos/adjuntoObra/eliminar/{id}
+    defaults: { _controller: crmBundle:Adjuntos:eliminar}
+    requirements:
+        id:  \d+
+ObrasAdjuntosOrdenar:
+    path:     /obras/adjuntos/reorder
+    defaults: { _controller: crmBundle:Adjuntos:reorder}

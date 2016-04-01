@@ -84,6 +84,10 @@ class Obras
 	 * @ORM\Column(type="datetime")
 	 */
 	protected $fechaModificacion;
+	/**
+	 * @ORM\Column(type="boolean")
+	 */
+	protected $tieneArchivos;
 
 
 
@@ -486,5 +490,28 @@ class Obras
     public function getFechaModificacion()
     {
         return $this->fechaModificacion;
+    }
+
+    /**
+     * Set tieneArchivos
+     *
+     * @param boolean $tieneArchivos
+     * @return Obras
+     */
+    public function setTieneArchivos($tieneArchivos)
+    {
+        $this->tieneArchivos = $tieneArchivos;
+
+        return $this;
+    }
+
+    /**
+     * Get tieneArchivos
+     *
+     * @return boolean 
+     */
+    public function getTieneArchivos()
+    {
+        return $this->tieneArchivos;
     }
 }

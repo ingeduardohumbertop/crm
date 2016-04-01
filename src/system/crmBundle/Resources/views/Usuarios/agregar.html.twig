@@ -1,9 +1,159 @@
 {% extends 'crmBundle::base.html.twig' %}
+{% block javascripts %} 
+{{parent()}}
+<script type="text/javascript" src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/vendor/jquery.ui.widget.js')}}"></script>
+<script type="text/javascript" src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.iframe-transport.js')}}"></script>
+<script type="text/javascript" src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload.js')}}"></script>
+
+<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/load-image.all.min.js')}}"></script>
+<!-- The Canvas to Blob plugin is included for image resizing functionality -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/canvas-to-blob.min.js')}}"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.iframe-transport.js')}}"></script>
+<!-- The basic File Upload plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload.js')}}"></script>
+<!-- The File Upload processing plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-process.js')}}"></script>
+<!-- The File Upload image preview & resize plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-image.js')}}"></script>
+<!-- The File Upload audio preview plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-audio.js')}}"></script>
+<!-- The File Upload video preview plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-video.js')}}"></script>
+<!-- The File Upload validation plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-validate.js')}}"></script>
+
+<!-- The Templates plugin is included to render the upload/download listings -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/tmpl.min.js')}}"></script>
+<!-- blueimp Gallery script -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.blueimp-gallery.min.js')}}"></script>
+<!-- The File Upload user interface plugin -->
+<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-ui.js')}}"></script>
+<!-- The main application script -->
+<!-- script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/main.js')}}"></script	-->
+<script type="text/javascript">
+$(function () {
+		'use strict';
+		$('#fileupload').fileupload({
+			
+			formData: {tipo:'fotoUsuario', idUsuario:'{{idUsuario}}'},
+			url: '{{ oneup_uploader_endpoint('gallery') }}',
+			autoUpload: true,
+			acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+			maxFileSize: 999000,
+			disableImageResize: /Android(?!.*Chrome)|Opera/
+				.test(window.navigator.userAgent),
+			imageMaxWidth: 1024,
+			imageMaxHeight: 768,
+		 //		 imageCrop: true, // Force cropped images
+			previewMaxWidth: 100,
+			previewMaxHeight: 100,
+			imageOrientation:true,
+			previewCrop: true
+		}).on('fileuploaddestroyed', function (e, data) {
+		});
+		
+		
+		$('#fileupload').addClass('fileupload-processing');
+		$.ajax({
+			url: '/usuarios/foto/{{idUsuario}}',
+			dataType: 'json',
+			context: $('#fileupload')[0]
+		}).always(function () {
+			$(this).removeClass('fileupload-processing');
+		}).done(function (result) {
+			$(this).fileupload('option', 'done')
+				.call(this, $.Event('done'), {result: result});
+		});
+	});			
+		
+
+	
+
+</script>
+<script src="{{ asset('public/js/formvalidation0.6.2/js/formValidation.js')}}"></script>
+<script src="{{ asset('public/js/formvalidation0.6.2/js/framework/bootstrap.js')}}"></script>
+<script src="{{ asset('public/js/formvalidation0.6.2/js/language/es_ES.js')}}"></script>
+<script src="{{ asset('public/js/formvalidation0.6.2/js/language/en_US.js')}}"></script>
+<script type="text/javascript">
+$(document).ready(function() {	
+
+$( '.modulo' ).on( 'click', function() {
+	if($(this).find('input').prop('checked') == false){
+		$(this).parent().find('input').each( function(index){
+			 $(this).prop('checked',false);
+			 $(this).prop('readonly', true);
+		});
+	}
+
+});
+$(".secciones input").change(function(){
+		if($(this).prop('checked') == true){
+			
+		$(this).closest('.modulop').find('.modulo').find('input').each( function(index){
+				 $(this).prop('checked',true);
+			});
+		
+		}
+	});
+
+	$('#usuariosForm')
+	.formValidation({
+		framework: 'bootstrap',
+		excluded: [':disabled'],
+		icon: {
+			valid: 'glyphicon glyphicon-ok',
+			invalid: 'glyphicon glyphicon-remove',
+			validating: 'glyphicon glyphicon-refresh'
+		},
+		locale: 'es_ES',
+		fields: {
+
+			'usuarios[fechaNacimiento]': {
+				validators: {
+					date: {
+						message: 'Debe ser una fecha'
+					}
+				}
+			},
+			'usuarios[email]': {
+				validators: {
+					emailAddress: {
+						  message: 'Email incorrecto'
+					},
+				}
+			},
+		    password: {
+	            validators: {
+	                identical: {
+	                    field: 'confirmPassword',
+	                    message: 'El password no coincide'
+	                },
+					 different: {
+		                 field: 'username',
+		                 message: 'El usuario y el password no pueden ser iguales'
+		             }
+	            }
+	        },
+	        'usuarios[username]': {
+	            validators: {
+	                different: {
+	                    field: 'usuarios[password]',
+	                    message: 'El usuario y el password no pueden ser iguales'
+	                }
+	            }
+	        },
+	        
+		}
+	});
+});
+</script>
+{% endblock %}
 {% block stylesheets %}
 {{ parent() }}
 <link rel="stylesheet" href="{{ asset('public/js/jQuery-File-Upload-9.10.1/css/jquery.fileupload-ui.css')}}">
 <link rel="stylesheet" href="{{ asset('public/js/jQuery-File-Upload-9.10.1/css/jquery.fileupload.css')}}">
-
 {% endblock %}
 {% block body %}
 <div class="container">
@@ -277,155 +427,4 @@
 	</div>
 </div>
 </div>
-{% endblock %}
-{% block javascripts %} 
-{{parent()}}
-<script type="text/javascript" src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/vendor/jquery.ui.widget.js')}}"></script>
-<script type="text/javascript" src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.iframe-transport.js')}}"></script>
-<script type="text/javascript" src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload.js')}}"></script>
-
-<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/load-image.all.min.js')}}"></script>
-<!-- The Canvas to Blob plugin is included for image resizing functionality -->
-<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/canvas-to-blob.min.js')}}"></script>
-<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.iframe-transport.js')}}"></script>
-<!-- The basic File Upload plugin -->
-<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload.js')}}"></script>
-<!-- The File Upload processing plugin -->
-<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-process.js')}}"></script>
-<!-- The File Upload image preview & resize plugin -->
-<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-image.js')}}"></script>
-<!-- The File Upload audio preview plugin -->
-<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-audio.js')}}"></script>
-<!-- The File Upload video preview plugin -->
-<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-video.js')}}"></script>
-<!-- The File Upload validation plugin -->
-<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-validate.js')}}"></script>
-
-<!-- The Templates plugin is included to render the upload/download listings -->
-<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/tmpl.min.js')}}"></script>
-<!-- blueimp Gallery script -->
-<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.blueimp-gallery.min.js')}}"></script>
-<!-- The File Upload user interface plugin -->
-<script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/jquery.fileupload-ui.js')}}"></script>
-<!-- The main application script -->
-<!-- script src="{{ asset('public/js/jQuery-File-Upload-9.10.1/js/main.js')}}"></script	-->
-<script type="text/javascript">
-$(function () {
-		'use strict';
-		$('#fileupload').fileupload({
-			
-			formData: {tipo:'fotoUsuario', idUsuario:'{{idUsuario}}'},
-			url: '/_uploader/gallery/upload',
-			autoUpload: true,
-			acceptFileTypes: /(\.|\/)(doc?|xls?|gif|jpe?g|png|ppt?|pdf|txt|csv)$/i,
-			maxFileSize: 999000,
-			disableImageResize: /Android(?!.*Chrome)|Opera/
-				.test(window.navigator.userAgent),
-			imageMaxWidth: 1024,
-			imageMaxHeight: 768,
-		 //		 imageCrop: true, // Force cropped images
-			previewMaxWidth: 100,
-			previewMaxHeight: 100,
-			imageOrientation:true,
-			previewCrop: true
-		}).on('fileuploaddestroyed', function (e, data) {
-		});
-		
-		
-		$('#fileupload').addClass('fileupload-processing');
-		$.ajax({
-			url: '/usuarios/foto/{{idUsuario}}',
-			dataType: 'json',
-			context: $('#fileupload')[0]
-		}).always(function () {
-			$(this).removeClass('fileupload-processing');
-		}).done(function (result) {
-			$(this).fileupload('option', 'done')
-				.call(this, $.Event('done'), {result: result});
-		});
-	});			
-		
-
-	
-
-</script>
-<script src="{{ asset('public/js/formvalidation0.6.2/js/formValidation.js')}}"></script>
-<script src="{{ asset('public/js/formvalidation0.6.2/js/framework/bootstrap.js')}}"></script>
-<script src="{{ asset('public/js/formvalidation0.6.2/js/language/es_ES.js')}}"></script>
-<script src="{{ asset('public/js/formvalidation0.6.2/js/language/en_US.js')}}"></script>
-<script type="text/javascript">
-$(document).ready(function() {	
-
-$( '.modulo' ).on( 'click', function() {
-	if($(this).find('input').prop('checked') == false){
-		$(this).parent().find('input').each( function(index){
-			 $(this).prop('checked',false);
-			 $(this).prop('readonly', true);
-		});
-	}
-
-});
-$(".secciones input").change(function(){
-		if($(this).prop('checked') == true){
-			
-		$(this).closest('.modulop').find('.modulo').find('input').each( function(index){
-				 $(this).prop('checked',true);
-			});
-		
-		}
-	});
-
-	$('#usuariosForm')
-	.formValidation({
-		framework: 'bootstrap',
-		excluded: [':disabled'],
-		icon: {
-			valid: 'glyphicon glyphicon-ok',
-			invalid: 'glyphicon glyphicon-remove',
-			validating: 'glyphicon glyphicon-refresh'
-		},
-		locale: 'es_ES',
-		fields: {
-
-			'usuarios[fechaNacimiento]': {
-				validators: {
-					date: {
-						message: 'Debe ser una fecha'
-					}
-				}
-			},
-			'usuarios[email]': {
-				validators: {
-					emailAddress: {
-						  message: 'Email incorrecto'
-					},
-				}
-			},
-		    password: {
-	            validators: {
-	                identical: {
-	                    field: 'confirmPassword',
-	                    message: 'El password no coincide'
-	                },
-					 different: {
-		                 field: 'username',
-		                 message: 'El usuario y el password no pueden ser iguales'
-		             }
-	            }
-	        },
-	        'usuarios[username]': {
-	            validators: {
-	                different: {
-	                    field: 'usuarios[password]',
-	                    message: 'El usuario y el password no pueden ser iguales'
-	                }
-	            }
-	        },
-	        
-		}
-	});
-});
-</script>
 {% endblock %}
